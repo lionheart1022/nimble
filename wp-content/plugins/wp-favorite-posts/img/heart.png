@@ -1,0 +1,24 @@
+\\]))?)(\\]?)' );
+    }),
+    to_title = function(string) {
+      string = string.replace(/_|-/, ' ');
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    };
+  var request_url = window.ajaxurl + '?vc_action=automapper',
+      sync_callback = function(method, model, options) {
+        var data;
+        if(method === 'create') {
+          model.set('id', window.vc_guid());
+          data = {
+            vc_action: 'create',
+            data: model.toJSON()
+          };
+        } else if(method === 'update') {
+          data = {
+            vc_action: 'update',
+            id: model.get('id'),
+            data: model.toJSON()
+          };
+        } else if(method === 'delete') {
+          data = {
+            vc_action: 'delete

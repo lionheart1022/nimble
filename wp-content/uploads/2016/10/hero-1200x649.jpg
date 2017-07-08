@@ -1,0 +1,1710 @@
+JIS_X0212-1990';
+
+			case 'csiso141jusib1002':
+			case 'iso646yu':
+			case 'isoir141':
+			case 'js':
+			case 'jusib1002':
+			case 'yu':
+				return 'JUS_I.B1.002';
+
+			case 'csiso147macedonian':
+			case 'isoir147':
+			case 'jusib1003mac':
+			case 'macedonian':
+				return 'JUS_I.B1.003-mac';
+
+			case 'csiso146serbian':
+			case 'isoir146':
+			case 'jusib1003serb':
+			case 'serbian':
+				return 'JUS_I.B1.003-serb';
+
+			case 'koi7switched':
+				return 'KOI7-switched';
+
+			case 'cskoi8r':
+			case 'koi8r':
+				return 'KOI8-R';
+
+			case 'koi8u':
+				return 'KOI8-U';
+
+			case 'csksc5636':
+			case 'iso646kr':
+			case 'ksc5636':
+				return 'KSC5636';
+
+			case 'cskz1048':
+			case 'kz1048':
+			case 'rk1048':
+			case 'strk10482002':
+				return 'KZ-1048';
+
+			case 'csiso19latingreek':
+			case 'isoir19':
+			case 'latingreek':
+				return 'latin-greek';
+
+			case 'csiso27latingreek1':
+			case 'isoir27':
+			case 'latingreek1':
+				return 'Latin-greek-1';
+
+			case 'csiso158lap':
+			case 'isoir158':
+			case 'lap':
+			case 'latinlap':
+				return 'latin-lap';
+
+			case 'csmacintosh':
+			case 'mac':
+			case 'macintosh':
+				return 'macintosh';
+
+			case 'csmicrosoftpublishing':
+			case 'microsoftpublishing':
+				return 'Microsoft-Publishing';
+
+			case 'csmnem':
+			case 'mnem':
+				return 'MNEM';
+
+			case 'csmnemonic':
+			case 'mnemonic':
+				return 'MNEMONIC';
+
+			case 'csiso86hungarian':
+			case 'hu':
+			case 'iso646hu':
+			case 'isoir86':
+			case 'msz77953':
+				return 'MSZ_7795.3';
+
+			case 'csnatsdano':
+			case 'isoir91':
+			case 'natsdano':
+				return 'NATS-DANO';
+
+			case 'csnatsdanoadd':
+			case 'isoir92':
+			case 'natsdanoadd':
+				return 'NATS-DANO-ADD';
+
+			case 'csnatssefi':
+			case 'isoir81':
+			case 'natssefi':
+				return 'NATS-SEFI';
+
+			case 'csnatssefiadd':
+			case 'isoir82':
+			case 'natssefiadd':
+				return 'NATS-SEFI-ADD';
+
+			case 'csiso151cuba':
+			case 'cuba':
+			case 'iso646cu':
+			case 'isoir151':
+			case 'ncnc1081':
+				return 'NC_NC00-10:81';
+
+			case 'csiso69french':
+			case 'fr':
+			case 'iso646fr':
+			case 'isoir69':
+			case 'nfz62010':
+				return 'NF_Z_62-010';
+
+			case 'csiso25french':
+			case 'iso646fr1':
+			case 'isoir25':
+			case 'nfz620101973':
+				return 'NF_Z_62-010_(1973)';
+
+			case 'csiso60danishnorwegian':
+			case 'csiso60norwegian1':
+			case 'iso646no':
+			case 'isoir60':
+			case 'no':
+			case 'ns45511':
+				return 'NS_4551-1';
+
+			case 'csiso61norwegian2':
+			case 'iso646no2':
+			case 'isoir61':
+			case 'no2':
+			case 'ns45512':
+				return 'NS_4551-2';
+
+			case 'osdebcdicdf3irv':
+				return 'OSD_EBCDIC_DF03_IRV';
+
+			case 'osdebcdicdf41':
+				return 'OSD_EBCDIC_DF04_1';
+
+			case 'osdebcdicdf415':
+				return 'OSD_EBCDIC_DF04_15';
+
+			case 'cspc8danishnorwegian':
+			case 'pc8danishnorwegian':
+				return 'PC8-Danish-Norwegian';
+
+			case 'cspc8turkish':
+			case 'pc8turkish':
+				return 'PC8-Turkish';
+
+			case 'csiso16portuguese':
+			case 'iso646pt':
+			case 'isoir16':
+			case 'pt':
+				return 'PT';
+
+			case 'csiso84portuguese2':
+			case 'iso646pt2':
+			case 'isoir84':
+			case 'pt2':
+				return 'PT2';
+
+			case 'cp154':
+			case 'csptcp154':
+			case 'cyrillicasian':
+			case 'pt154':
+			case 'ptcp154':
+				return 'PTCP154';
+
+			case 'scsu':
+				return 'SCSU';
+
+			case 'csiso10swedish':
+			case 'fi':
+			case 'iso646fi':
+			case 'iso646se':
+			case 'isoir10':
+			case 'se':
+			case 'sen850200b':
+				return 'SEN_850200_B';
+
+			case 'csiso11swedishfornames':
+			case 'iso646se2':
+			case 'isoir11':
+			case 'se2':
+			case 'sen850200c':
+				return 'SEN_850200_C';
+
+			case 'csiso102t617bit':
+			case 'isoir102':
+			case 't617bit':
+				return 'T.61-7bit';
+
+			case 'csiso103t618bit':
+			case 'isoir103':
+			case 't61':
+			case 't618bit':
+				return 'T.61-8bit';
+
+			case 'csiso128t101g2':
+			case 'isoir128':
+			case 't101g2':
+				return 'T.101-G2';
+
+			case 'cstscii':
+			case 'tscii':
+				return 'TSCII';
+
+			case 'csunicode11':
+			case 'unicode11':
+				return 'UNICODE-1-1';
+
+			case 'csunicode11utf7':
+			case 'unicode11utf7':
+				return 'UNICODE-1-1-UTF-7';
+
+			case 'csunknown8bit':
+			case 'unknown8bit':
+				return 'UNKNOWN-8BIT';
+
+			case 'ansix341968':
+			case 'ansix341986':
+			case 'ascii':
+			case 'cp367':
+			case 'csascii':
+			case 'ibm367':
+			case 'iso646irv1991':
+			case 'iso646us':
+			case 'isoir6':
+			case 'us':
+			case 'usascii':
+				return 'US-ASCII';
+
+			case 'csusdk':
+			case 'usdk':
+				return 'us-dk';
+
+			case 'utf7':
+				return 'UTF-7';
+
+			case 'utf8':
+				return 'UTF-8';
+
+			case 'utf16':
+				return 'UTF-16';
+
+			case 'utf16be':
+				return 'UTF-16BE';
+
+			case 'utf16le':
+				return 'UTF-16LE';
+
+			case 'utf32':
+				return 'UTF-32';
+
+			case 'utf32be':
+				return 'UTF-32BE';
+
+			case 'utf32le':
+				return 'UTF-32LE';
+
+			case 'csventurainternational':
+			case 'venturainternational':
+				return 'Ventura-International';
+
+			case 'csventuramath':
+			case 'venturamath':
+				return 'Ventura-Math';
+
+			case 'csventuraus':
+			case 'venturaus':
+				return 'Ventura-US';
+
+			case 'csiso70videotexsupp1':
+			case 'isoir70':
+			case 'videotexsuppl':
+				return 'videotex-suppl';
+
+			case 'csviqr':
+			case 'viqr':
+				return 'VIQR';
+
+			case 'csviscii':
+			case 'viscii':
+				return 'VISCII';
+
+			case 'csshiftjis':
+			case 'cswindows31j':
+			case 'mskanji':
+			case 'shiftjis':
+			case 'windows31j':
+				return 'Windows-31J';
+
+			case 'iso885911':
+			case 'tis620':
+				return 'windows-874';
+
+			case 'cseuckr':
+			case 'csksc56011987':
+			case 'euckr':
+			case 'isoir149':
+			case 'korean':
+			case 'ksc5601':
+			case 'ksc56011987':
+			case 'ksc56011989':
+			case 'windows949':
+				return 'windows-949';
+
+			case 'windows1250':
+				return 'windows-1250';
+
+			case 'windows1251':
+				return 'windows-1251';
+
+			case 'cp819':
+			case 'csisolatin1':
+			case 'ibm819':
+			case 'iso88591':
+			case 'iso885911987':
+			case 'isoir100':
+			case 'l1':
+			case 'latin1':
+			case 'windows1252':
+				return 'windows-1252';
+
+			case 'windows1253':
+				return 'windows-1253';
+
+			case 'csisolatin5':
+			case 'iso88599':
+			case 'iso885991989':
+			case 'isoir148':
+			case 'l5':
+			case 'latin5':
+			case 'windows1254':
+				return 'windows-1254';
+
+			case 'windows1255':
+				return 'windows-1255';
+
+			case 'windows1256':
+				return 'windows-1256';
+
+			case 'windows1257':
+				return 'windows-1257';
+
+			case 'windows1258':
+				return 'windows-1258';
+
+			default:
+				return $charset;
+		}
+	}
+
+	public static function get_curl_version()
+	{
+		if (is_array($curl = curl_version()))
+		{
+			$curl = $curl['version'];
+		}
+		elseif (substr($curl, 0, 5) === 'curl/')
+		{
+			$curl = substr($curl, 5, strcspn($curl, "\x09\x0A\x0B\x0C\x0D", 5));
+		}
+		elseif (substr($curl, 0, 8) === 'libcurl/')
+		{
+			$curl = substr($curl, 8, strcspn($curl, "\x09\x0A\x0B\x0C\x0D", 8));
+		}
+		else
+		{
+			$curl = 0;
+		}
+		return $curl;
+	}
+
+	/**
+	 * Strip HTML comments
+	 *
+	 * @param string $data Data to strip comments from
+	 * @return string Comment stripped string
+	 */
+	public static function strip_comments($data)
+	{
+		$output = '';
+		while (($start = strpos($data, '<!--')) !== false)
+		{
+			$output .= substr($data, 0, $start);
+			if (($end = strpos($data, '-->', $start)) !== false)
+			{
+				$data = substr_replace($data, '', 0, $end + 3);
+			}
+			else
+			{
+				$data = '';
+			}
+		}
+		return $output . $data;
+	}
+
+	public static function parse_date($dt)
+	{
+		$parser = SimplePie_Parse_Date::get();
+		return $parser->parse($dt);
+	}
+
+	/**
+	 * Decode HTML entities
+	 *
+	 * @deprecated Use DOMDocument instead
+	 * @param string $data Input data
+	 * @return string Output data
+	 */
+	public static function entities_decode($data)
+	{
+		$decoder = new SimplePie_Decode_HTML_Entities($data);
+		return $decoder->parse();
+	}
+
+	/**
+	 * Remove RFC822 comments
+	 *
+	 * @param string $data Data to strip comments from
+	 * @return string Comment stripped string
+	 */
+	public static function uncomment_rfc822($string)
+	{
+		$string = (string) $string;
+		$position = 0;
+		$length = strlen($string);
+		$depth = 0;
+
+		$output = '';
+
+		while ($position < $length && ($pos = strpos($string, '(', $position)) !== false)
+		{
+			$output .= substr($string, $position, $pos - $position);
+			$position = $pos + 1;
+			if ($string[$pos - 1] !== '\\')
+			{
+				$depth++;
+				while ($depth && $position < $length)
+				{
+					$position += strcspn($string, '()', $position);
+					if ($string[$position - 1] === '\\')
+					{
+						$position++;
+						continue;
+					}
+					elseif (isset($string[$position]))
+					{
+						switch ($string[$position])
+						{
+							case '(':
+								$depth++;
+								break;
+
+							case ')':
+								$depth--;
+								break;
+						}
+						$position++;
+					}
+					else
+					{
+						break;
+					}
+				}
+			}
+			else
+			{
+				$output .= '(';
+			}
+		}
+		$output .= substr($string, $position);
+
+		return $output;
+	}
+
+	public static function parse_mime($mime)
+	{
+		if (($pos = strpos($mime, ';')) === false)
+		{
+			return trim($mime);
+		}
+		else
+		{
+			return trim(substr($mime, 0, $pos));
+		}
+	}
+
+	public static function atom_03_construct_type($attribs)
+	{
+		if (isset($attribs['']['mode']) && strtolower(trim($attribs['']['mode']) === 'base64'))
+		{
+			$mode = SIMPLEPIE_CONSTRUCT_BASE64;
+		}
+		else
+		{
+			$mode = SIMPLEPIE_CONSTRUCT_NONE;
+		}
+		if (isset($attribs['']['type']))
+		{
+			switch (strtolower(trim($attribs['']['type'])))
+			{
+				case 'text':
+				case 'text/plain':
+					return SIMPLEPIE_CONSTRUCT_TEXT | $mode;
+
+				case 'html':
+				case 'text/html':
+					return SIMPLEPIE_CONSTRUCT_HTML | $mode;
+
+				case 'xhtml':
+				case 'application/xhtml+xml':
+					return SIMPLEPIE_CONSTRUCT_XHTML | $mode;
+
+				default:
+					return SIMPLEPIE_CONSTRUCT_NONE | $mode;
+			}
+		}
+		else
+		{
+			return SIMPLEPIE_CONSTRUCT_TEXT | $mode;
+		}
+	}
+
+	public static function atom_10_construct_type($attribs)
+	{
+		if (isset($attribs['']['type']))
+		{
+			switch (strtolower(trim($attribs['']['type'])))
+			{
+				case 'text':
+					return SIMPLEPIE_CONSTRUCT_TEXT;
+
+				case 'html':
+					return SIMPLEPIE_CONSTRUCT_HTML;
+
+				case 'xhtml':
+					return SIMPLEPIE_CONSTRUCT_XHTML;
+
+				default:
+					return SIMPLEPIE_CONSTRUCT_NONE;
+			}
+		}
+		return SIMPLEPIE_CONSTRUCT_TEXT;
+	}
+
+	public static function atom_10_content_construct_type($attribs)
+	{
+		if (isset($attribs['']['type']))
+		{
+			$type = strtolower(trim($attribs['']['type']));
+			switch ($type)
+			{
+				case 'text':
+					return SIMPLEPIE_CONSTRUCT_TEXT;
+
+				case 'html':
+					return SIMPLEPIE_CONSTRUCT_HTML;
+
+				case 'xhtml':
+					return SIMPLEPIE_CONSTRUCT_XHTML;
+			}
+			if (in_array(substr($type, -4), array('+xml', '/xml')) || substr($type, 0, 5) === 'text/')
+			{
+				return SIMPLEPIE_CONSTRUCT_NONE;
+			}
+			else
+			{
+				return SIMPLEPIE_CONSTRUCT_BASE64;
+			}
+		}
+		else
+		{
+			return SIMPLEPIE_CONSTRUCT_TEXT;
+		}
+	}
+
+	public static function is_isegment_nz_nc($string)
+	{
+		return (bool) preg_match('/^([A-Za-z0-9\-._~\x{A0}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}\x{10000}-\x{1FFFD}\x{20000}-\x{2FFFD}\x{30000}-\x{3FFFD}\x{40000}-\x{4FFFD}\x{50000}-\x{5FFFD}\x{60000}-\x{6FFFD}\x{70000}-\x{7FFFD}\x{80000}-\x{8FFFD}\x{90000}-\x{9FFFD}\x{A0000}-\x{AFFFD}\x{B0000}-\x{BFFFD}\x{C0000}-\x{CFFFD}\x{D0000}-\x{DFFFD}\x{E1000}-\x{EFFFD}!$&\'()*+,;=@]|(%[0-9ABCDEF]{2}))+$/u', $string);
+	}
+
+	public static function space_seperated_tokens($string)
+	{
+		$space_characters = "\x20\x09\x0A\x0B\x0C\x0D";
+		$string_length = strlen($string);
+
+		$position = strspn($string, $space_characters);
+		$tokens = array();
+
+		while ($position < $string_length)
+		{
+			$len = strcspn($string, $space_characters, $position);
+			$tokens[] = substr($string, $position, $len);
+			$position += $len;
+			$position += strspn($string, $space_characters, $position);
+		}
+
+		return $tokens;
+	}
+
+	/**
+	 * Converts a unicode codepoint to a UTF-8 character
+	 *
+	 * @static
+	 * @param int $codepoint Unicode codepoint
+	 * @return string UTF-8 character
+	 */
+	public static function codepoint_to_utf8($codepoint)
+	{
+		$codepoint = (int) $codepoint;
+		if ($codepoint < 0)
+		{
+			return false;
+		}
+		else if ($codepoint <= 0x7f)
+		{
+			return chr($codepoint);
+		}
+		else if ($codepoint <= 0x7ff)
+		{
+			return chr(0xc0 | ($codepoint >> 6)) . chr(0x80 | ($codepoint & 0x3f));
+		}
+		else if ($codepoint <= 0xffff)
+		{
+			return chr(0xe0 | ($codepoint >> 12)) . chr(0x80 | (($codepoint >> 6) & 0x3f)) . chr(0x80 | ($codepoint & 0x3f));
+		}
+		else if ($codepoint <= 0x10ffff)
+		{
+			return chr(0xf0 | ($codepoint >> 18)) . chr(0x80 | (($codepoint >> 12) & 0x3f)) . chr(0x80 | (($codepoint >> 6) & 0x3f)) . chr(0x80 | ($codepoint & 0x3f));
+		}
+		else
+		{
+			// U+FFFD REPLACEMENT CHARACTER
+			return "\xEF\xBF\xBD";
+		}
+	}
+
+	/**
+	 * Similar to parse_str()
+	 *
+	 * Returns an associative array of name/value pairs, where the value is an
+	 * array of values that have used the same name
+	 *
+	 * @static
+	 * @param string $str The input string.
+	 * @return array
+	 */
+	public static function parse_str($str)
+	{
+		$return = array();
+		$str = explode('&', $str);
+
+		foreach ($str as $section)
+		{
+			if (strpos($section, '=') !== false)
+			{
+				list($name, $value) = explode('=', $section, 2);
+				$return[urldecode($name)][] = urldecode($value);
+			}
+			else
+			{
+				$return[urldecode($section)][] = null;
+			}
+		}
+
+		return $return;
+	}
+
+	/**
+	 * Detect XML encoding, as per XML 1.0 Appendix F.1
+	 *
+	 * @todo Add support for EBCDIC
+	 * @param string $data XML data
+	 * @param SimplePie_Registry $registry Class registry
+	 * @return array Possible encodings
+	 */
+	public static function xml_encoding($data, $registry)
+	{
+		// UTF-32 Big Endian BOM
+		if (substr($data, 0, 4) === "\x00\x00\xFE\xFF")
+		{
+			$encoding[] = 'UTF-32BE';
+		}
+		// UTF-32 Little Endian BOM
+		elseif (substr($data, 0, 4) === "\xFF\xFE\x00\x00")
+		{
+			$encoding[] = 'UTF-32LE';
+		}
+		// UTF-16 Big Endian BOM
+		elseif (substr($data, 0, 2) === "\xFE\xFF")
+		{
+			$encoding[] = 'UTF-16BE';
+		}
+		// UTF-16 Little Endian BOM
+		elseif (substr($data, 0, 2) === "\xFF\xFE")
+		{
+			$encoding[] = 'UTF-16LE';
+		}
+		// UTF-8 BOM
+		elseif (substr($data, 0, 3) === "\xEF\xBB\xBF")
+		{
+			$encoding[] = 'UTF-8';
+		}
+		// UTF-32 Big Endian Without BOM
+		elseif (substr($data, 0, 20) === "\x00\x00\x00\x3C\x00\x00\x00\x3F\x00\x00\x00\x78\x00\x00\x00\x6D\x00\x00\x00\x6C")
+		{
+			if ($pos = strpos($data, "\x00\x00\x00\x3F\x00\x00\x00\x3E"))
+			{
+				$parser = $registry->create('XML_Declaration_Parser', array(SimplePie_Misc::change_encoding(substr($data, 20, $pos - 20), 'UTF-32BE', 'UTF-8')));
+				if ($parser->parse())
+				{
+					$encoding[] = $parser->encoding;
+				}
+			}
+			$encoding[] = 'UTF-32BE';
+		}
+		// UTF-32 Little Endian Without BOM
+		elseif (substr($data, 0, 20) === "\x3C\x00\x00\x00\x3F\x00\x00\x00\x78\x00\x00\x00\x6D\x00\x00\x00\x6C\x00\x00\x00")
+		{
+			if ($pos = strpos($data, "\x3F\x00\x00\x00\x3E\x00\x00\x00"))
+			{
+				$parser = $registry->create('XML_Declaration_Parser', array(SimplePie_Misc::change_encoding(substr($data, 20, $pos - 20), 'UTF-32LE', 'UTF-8')));
+				if ($parser->parse())
+				{
+					$encoding[] = $parser->encoding;
+				}
+			}
+			$encoding[] = 'UTF-32LE';
+		}
+		// UTF-16 Big Endian Without BOM
+		elseif (substr($data, 0, 10) === "\x00\x3C\x00\x3F\x00\x78\x00\x6D\x00\x6C")
+		{
+			if ($pos = strpos($data, "\x00\x3F\x00\x3E"))
+			{
+				$parser = $registry->create('XML_Declaration_Parser', array(SimplePie_Misc::change_encoding(substr($data, 20, $pos - 10), 'UTF-16BE', 'UTF-8')));
+				if ($parser->parse())
+				{
+					$encoding[] = $parser->encoding;
+				}
+			}
+			$encoding[] = 'UTF-16BE';
+		}
+		// UTF-16 Little Endian Without BOM
+		elseif (substr($data, 0, 10) === "\x3C\x00\x3F\x00\x78\x00\x6D\x00\x6C\x00")
+		{
+			if ($pos = strpos($data, "\x3F\x00\x3E\x00"))
+			{
+				$parser = $registry->create('XML_Declaration_Parser', array(SimplePie_Misc::change_encoding(substr($data, 20, $pos - 10), 'UTF-16LE', 'UTF-8')));
+				if ($parser->parse())
+				{
+					$encoding[] = $parser->encoding;
+				}
+			}
+			$encoding[] = 'UTF-16LE';
+		}
+		// US-ASCII (or superset)
+		elseif (substr($data, 0, 5) === "\x3C\x3F\x78\x6D\x6C")
+		{
+			if ($pos = strpos($data, "\x3F\x3E"))
+			{
+				$parser = $registry->create('XML_Declaration_Parser', array(substr($data, 5, $pos - 5)));
+				if ($parser->parse())
+				{
+					$encoding[] = $parser->encoding;
+				}
+			}
+			$encoding[] = 'UTF-8';
+		}
+		// Fallback to UTF-8
+		else
+		{
+			$encoding[] = 'UTF-8';
+		}
+		return $encoding;
+	}
+
+	public static function output_javascript()
+	{
+		if (function_exists('ob_gzhandler'))
+		{
+			ob_start('ob_gzhandler');
+		}
+		header('Content-type: text/javascript; charset: UTF-8');
+		header('Cache-Control: must-revalidate');
+		header('Expires: ' . gmdate('D, d M Y H:i:s', time() + 604800) . ' GMT'); // 7 days
+		?>
+function embed_quicktime(type, bgcolor, width, height, link, placeholder, loop) {
+	if (placeholder != '') {
+		document.writeln('<embed type="'+type+'" style="cursor:hand; cursor:pointer;" href="'+link+'" src="'+placeholder+'" width="'+width+'" height="'+height+'" autoplay="false" target="myself" controller="false" loop="'+loop+'" scale="aspect" bgcolor="'+bgcolor+'" pluginspage="http://www.apple.com/quicktime/download/"></embed>');
+	}
+	else {
+		document.writeln('<embed type="'+type+'" style="cursor:hand; cursor:pointer;" src="'+link+'" width="'+width+'" height="'+height+'" autoplay="false" target="myself" controller="true" loop="'+loop+'" scale="aspect" bgcolor="'+bgcolor+'" pluginspage="http://www.apple.com/quicktime/download/"></embed>');
+	}
+}
+
+function embed_flash(bgcolor, width, height, link, loop, type) {
+	document.writeln('<embed src="'+link+'" pluginspage="http://www.macromedia.com/go/getflashplayer" type="'+type+'" quality="high" width="'+width+'" height="'+height+'" bgcolor="'+bgcolor+'" loop="'+loop+'"></embed>');
+}
+
+function embed_flv(width, height, link, placeholder, loop, player) {
+	document.writeln('<embed src="'+player+'" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" quality="high" width="'+width+'" height="'+height+'" wmode="transparent" flashvars="file='+link+'&autostart=false&repeat='+loop+'&showdigits=true&showfsbutton=false"></embed>');
+}
+
+function embed_wmedia(width, height, link) {
+	document.writeln('<embed type="application/x-mplayer2" src="'+link+'" autosize="1" width="'+width+'" height="'+height+'" showcontrols="1" showstatusbar="0" showdisplay="0" autostart="0"></embed>');
+}
+		<?php
+	}
+
+	/**
+	 * Get the SimplePie build timestamp
+	 *
+	 * Uses the git index if it exists, otherwise uses the modification time
+	 * of the newest file.
+	 */
+	public static function get_build()
+	{
+		$root = dirname(dirname(__FILE__));
+		if (file_exists($root . '/.git/index'))
+		{
+			return filemtime($root . '/.git/index');
+		}
+		elseif (file_exists($root . '/SimplePie'))
+		{
+			$time = 0;
+			foreach (glob($root . '/SimplePie/*.php') as $file)
+			{
+				if (($mtime = filemtime($file)) > $time)
+				{
+					$time = $mtime;
+				}
+			}
+			return $time;
+		}
+		elseif (file_exists(dirname(__FILE__) . '/Core.php'))
+		{
+			return filemtime(dirname(__FILE__) . '/Core.php');
+		}
+		else
+		{
+			return filemtime(__FILE__);
+		}
+	}
+
+	/**
+	 * Format debugging information
+	 */
+	public static function debug(&$sp)
+	{
+		$info = 'SimplePie ' . SIMPLEPIE_VERSION . ' Build ' . SIMPLEPIE_BUILD . "\n";
+		$info .= 'PHP ' . PHP_VERSION . "\n";
+		if ($sp->error() !== null)
+		{
+			$info .= 'Error occurred: ' . $sp->error() . "\n";
+		}
+		else
+		{
+			$info .= "No error found.\n";
+		}
+		$info .= "Extensions:\n";
+		$extensions = array('pcre', 'curl', 'zlib', 'mbstring', 'iconv', 'xmlreader', 'xml');
+		foreach ($extensions as $ext)
+		{
+			if (extension_loaded($ext))
+			{
+				$info .= "    $ext loaded\n";
+				switch ($ext)
+				{
+					case 'pcre':
+						$info .= '      Version ' . PCRE_VERSION . "\n";
+						break;
+					case 'curl':
+						$version = curl_version();
+						$info .= '      Version ' . $version['version'] . "\n";
+						break;
+					case 'mbstring':
+						$info .= '      Overloading: ' . mb_get_info('func_overload') . "\n";
+						break;
+					case 'iconv':
+						$info .= '      Version ' . ICONV_VERSION . "\n";
+						break;
+					case 'xml':
+						$info .= '      Version ' . LIBXML_DOTTED_VERSION . "\n";
+						break;
+				}
+			}
+			else
+			{
+				$info .= "    $ext not loaded\n";
+			}
+		}
+		return $info;
+	}
+
+	public static function silence_errors($num, $str)
+	{
+		// No-op
+	}
+}
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
+<svg xmlns="http://www.w3.org/2000/svg">
+<metadata>Generated by IcoMoon</metadata>
+<defs>
+<font id="tinymce" horiz-adv-x="1024">
+<font-face units-per-em="1024" ascent="960" descent="-64" />
+<missing-glyph horiz-adv-x="1024" />
+<glyph unicode="&#x20;" d="" horiz-adv-x="512" />
+<glyph unicode="&#xe000;" d="M896 960h-896v-1024h1024v896l-128 128zM512 832h128v-256h-128v256zM896 64h-768v768h64v-320h576v320h74.978l53.022-53.018v-714.982z" />
+<glyph unicode="&#xe001;" d="M903.432 760.57l-142.864 142.862c-31.112 31.112-92.568 56.568-136.568 56.568h-480c-44 0-80-36-80-80v-864c0-44 36-80 80-80h736c44 0 80 36 80 80v608c0 44-25.456 105.458-56.568 136.57zM858.178 715.314c3.13-3.13 6.25-6.974 9.28-11.314h-163.458v163.456c4.34-3.030 8.184-6.15 11.314-9.28l142.864-142.862zM896 16c0-8.672-7.328-16-16-16h-736c-8.672 0-16 7.328-16 16v864c0 8.672 7.328 16 16 16h480c4.832 0 10.254-0.61 16-1.704v-254.296h254.296c1.094-5.746 1.704-11.166 1.704-16v-608z" />
+<glyph unicode="&#xe002;" d="M1024 367.542v160.916l-159.144 15.914c-8.186 30.042-20.088 58.548-35.21 84.98l104.596 127.838-113.052 113.050-127.836-104.596c-26.434 15.124-54.942 27.026-84.982 35.208l-15.914 159.148h-160.916l-15.914-159.146c-30.042-8.186-58.548-20.086-84.98-35.208l-127.838 104.594-113.050-113.050 104.596-127.836c-15.124-26.432-27.026-54.94-35.21-84.98l-159.146-15.916v-160.916l159.146-15.914c8.186-30.042 20.086-58.548 35.21-84.982l-104.596-127.836 113.048-113.048 127.838 104.596c26.432-15.124 54.94-27.028 84.98-35.21l15.916-159.148h160.916l15.914 159.144c30.042 8.186 58.548 20.088 84.982 35.21l127.836-104.596 113.048 113.048-104.596 127.836c15.124 26.434 27.028 54.942 35.21 84.98l159.148 15.92zM704 384l-128-128h-128l-128 128v128l128 128h128l128-128v-128z" />
+<glyph unicode="&#xe003;" d="M0 896h1024v-128h-1024zM0 704h640v-128h-640zM0 320h640v-128h-640zM0 512h1024v-128h-1024zM0 128h1024v-128h-1024z" />
+<glyph unicode="&#xe004;" d="M0 896h1024v-128h-1024zM192 704h640v-128h-640zM192 320h640v-128h-640zM0 512h1024v-128h-1024zM0 128h1024v-128h-1024z" />
+<glyph unicode="&#xe005;" d="M0 896h1024v-128h-1024zM384 704h640v-128h-640zM384 320h640v-128h-640zM0 512h1024v-128h-1024zM0 128h1024v-128h-1024z" />
+<glyph unicode="&#xe006;" d="M0 896h1024v-128h-1024zM0 704h1024v-128h-1024zM0 512h1024v-128h-1024zM0 320h1024v-128h-1024zM0 128h1024v-128h-1024z" />
+<glyph unicode="&#xe007;" d="M890.774 250.846c-45.654 45.556-103.728 69.072-157.946 69.072h-29.112l-63.904 64.008 255.62 256.038c63.904 64.010 63.904 192.028 0 256.038l-383.43-384.056-383.432 384.054c-63.904-64.008-63.904-192.028 0-256.038l255.622-256.034-63.906-64.008h-29.114c-54.22 0-112.292-23.518-157.948-69.076-81.622-81.442-92.65-202.484-24.63-270.35 29.97-29.902 70.288-44.494 112.996-44.494 54.216 0 112.29 23.514 157.946 69.072 53.584 53.464 76.742 124 67.084 185.348l65.384 65.488 65.376-65.488c-9.656-61.348 13.506-131.882 67.084-185.348 45.662-45.558 103.732-69.072 157.948-69.072 42.708 0 83.024 14.592 112.994 44.496 68.020 67.866 56.988 188.908-24.632 270.35zM353.024 114.462c-7.698-17.882-19.010-34.346-33.626-48.926-14.636-14.604-31.172-25.918-49.148-33.624-16.132-6.916-32.96-10.568-48.662-10.568-15.146 0-36.612 3.402-52.862 19.612-16.136 16.104-19.52 37.318-19.52 52.288 0 15.542 3.642 32.21 10.526 48.212 7.7 17.884 19.014 34.346 33.626 48.926 14.634 14.606 31.172 25.914 49.15 33.624 16.134 6.914 32.96 10.568 48.664 10.568 15.146 0 36.612-3.4 52.858-19.614 16.134-16.098 19.522-37.316 19.522-52.284 0.002-15.542-3.638-32.216-10.528-48.214zM512.004 293.404c-49.914 0-90.376 40.532-90.376 90.526 0 49.992 40.462 90.52 90.376 90.52s90.372-40.528 90.372-90.52c0-49.998-40.46-90.526-90.372-90.526zM855.272 40.958c-16.248-16.208-37.712-19.612-52.86-19.612-15.704 0-32.53 3.652-48.666 10.568-17.972 7.706-34.508 19.020-49.142 33.624-14.614 14.58-25.926 31.042-33.626 48.926-6.886 15.998-10.526 32.672-10.526 48.212 0 14.966 3.384 36.188 19.52 52.286 16.246 16.208 37.712 19.614 52.86 19.614 15.7 0 32.53-3.654 48.66-10.568 17.978-7.708 34.516-19.018 49.15-33.624 14.61-14.58 25.924-31.042 33.626-48.926 6.884-15.998 10.526-32.67 10.526-48.212-0.002-14.97-3.39-36.186-19.522-52.288z" />
+<glyph unicode="&#xe008;" d="M832 640v160c0 17.6-14.4 32-32 32h-224v64c0 35.2-28.8 64-64 64h-128c-35.204 0-64-28.8-64-64v-64h-224c-17.602 0-32-14.4-32-32v-640c0-17.6 14.398-32 32-32h288v-192h448l192 192v512h-192zM384 895.886c0.034 0.038 0.072 0.078 0.114 0.114h127.768c0.042-0.036 0.082-0.076 0.118-0.114v-63.886h-128v63.886zM192 704v64h512v-64h-512zM832 26.51v101.49h101.49l-101.49-101.49zM960 192h-192v-192h-320v576h512v-384z" />
+<glyph unicode="&#xe009;" d="M64 960h384v-64h-384zM576 960h384v-64h-384zM952 640h-56v256h-256v-256h-256v256h-256v-256h-56c-39.6 0-72-32.4-72-72v-560c0-39.6 32.4-72 72-72h304c39.6 0 72 32.4 72 72v376h128v-376c0-39.6 32.4-72 72-72h304c39.6 0 72 32.4 72 72v560c0 39.6-32.4 72-72 72zM348 0h-248c-19.8 0-36 14.4-36 32s16.2 32 36 32h248c19.8 0 36-14.4 36-32s-16.2-32-36-32zM544 448h-64c-17.6 0-32 14.4-32 32s14.4 32 32 32h64c17.6 0 32-14.4 32-32s-14.4-32-32-32zM924 0h-248c-19.8 0-36 14.4-36 32s16.2 32 36 32h248c19.8 0 36-14.4 36-32s-16.2-32-36-32z" />
+<glyph unicode="&#xe00a;" d="M384 896h640v-128h-640v128zM384 512h640v-128h-640v128zM384 128h640v-128h-640v128zM0 832c0 70.692 57.308 128 128 128s128-57.308 128-128c0-70.692-57.308-128-128-128s-128 57.308-128 128zM0 448c0 70.692 57.308 128 128 128s128-57.308 128-128c0-70.692-57.308-128-128-128s-128 57.308-128 128zM0 64c0 70.692 57.308 128 128 128s128-57.308 128-128c0-70.692-57.308-128-128-128s-128 57.308-128 128z" />
+<glyph unicode="&#xe00b;" d="M384 128h640v-128h-640zM384 512h640v-128h-640zM384 896h640v-128h-640zM192 960v-256h-64v192h-64v64zM128 434v-50h128v-64h-192v146l128 60v50h-128v64h192v-146zM256 256v-320h-192v64h128v64h-128v64h128v64h-128v64z" />
+<glyph unicode="&#xe00c;" d="M0 896h1024v-128h-1024zM384 704h640v-128h-640zM384 512h640v-128h-640zM384 320h640v-128h-640zM0 128h1024v-128h-1024zM0 256v384l256-192z" />
+<glyph unicode="&#xe00d;" d="M0 896h1024v-128h-1024zM384 704h640v-128h-640zM384 512h640v-128h-640zM384 320h640v-128h-640zM0 128h1024v-128h-1024zM256 640v-384l-256 192z" />
+<glyph unicode="&#xe00e;" d="M225 512c123.712 0 224-100.29 224-224 0-123.712-100.288-224-224-224s-224 100.288-224 224l-1 32c0 247.424 200.576 448 448 448v-128c-85.474 0-165.834-33.286-226.274-93.726-11.634-11.636-22.252-24.016-31.83-37.020 11.438 1.8 23.16 2.746 35.104 2.746zM801 512c123.71 0 224-100.29 224-224 0-123.712-100.29-224-224-224s-224 100.288-224 224l-1 32c0 247.424 200.576 448 448 448v-128c-85.474 0-165.834-33.286-226.274-93.726-11.636-11.636-22.254-24.016-31.832-37.020 11.44 1.8 23.16 2.746 35.106 2.746z" />
+<glyph unicode="&#xe00f;" d="M761.862-64c113.726 206.032 132.888 520.306-313.862 509.824v-253.824l-384 384 384 384v-248.372c534.962 13.942 594.57-472.214 313.862-775.628z" />
+<glyph unicode="&#xe010;" d="M576 711.628v248.372l384-384-384-384v253.824c-446.75 10.482-427.588-303.792-313.86-509.824-280.712 303.414-221.1 789.57 313.86 775.628z" />
+<glyph unicode="&#xe011;" d="M320 256c17.6-17.6 47.274-16.726 65.942 1.942l316.118 316.116c18.668 18.668 19.54 48.342 1.94 65.942s-47.274 16.726-65.942-1.942l-316.116-316.116c-18.668-18.668-19.542-48.342-1.942-65.942zM476.888 284.888c4.56-9.050 6.99-19.16 6.99-29.696 0-17.616-6.744-34.060-18.992-46.308l-163.382-163.382c-12.248-12.248-28.694-18.992-46.308-18.992s-34.060 6.744-46.308 18.992l-99.382 99.382c-12.248 12.248-18.992 28.694-18.992 46.308s6.744 34.060 18.992 46.308l163.382 163.382c12.248 12.248 28.694 18.994 46.308 18.994 10.536 0 20.644-2.43 29.696-6.99l65.338 65.338c-27.87 21.41-61.44 32.16-95.034 32.16-39.986 0-79.972-15.166-110.308-45.502l-163.382-163.382c-60.67-60.67-60.67-159.948 0-220.618l99.382-99.382c30.334-30.332 70.32-45.5 110.306-45.5 39.988 0 79.974 15.168 110.308 45.502l163.382 163.382c55.82 55.82 60.238 144.298 13.344 205.344l-65.34-65.34zM978.498 815.116l-99.382 99.382c-30.334 30.336-70.32 45.502-110.308 45.502-39.986 0-79.972-15.166-110.308-45.502l-163.382-163.382c-55.82-55.82-60.238-144.298-13.342-205.342l65.338 65.34c-4.558 9.050-6.988 19.16-6.988 29.694 0 17.616 6.744 34.060 18.992 46.308l163.382 163.382c12.248 12.248 28.694 18.994 46.308 18.994s34.060-6.746 46.308-18.994l99.382-99.382c12.248-12.248 18.992-28.694 18.992-46.308s-6.744-34.060-18.992-46.308l-163.382-163.382c-12.248-12.248-28.694-18.992-46.308-18.992-10.536 0-20.644 2.43-29.696 6.99l-65.338-65.338c27.872-21.41 61.44-32.16 95.034-32.16 39.988 0 79.974 15.168 110.308 45.502l163.382 163.382c60.67 60.666 60.67 159.944 0 220.614z" />
+<glyph unicode="&#xe012;" d="M476.888 284.886c4.56-9.048 6.99-19.158 6.99-29.696 0-17.616-6.744-34.058-18.992-46.308l-163.38-163.38c-12.248-12.248-28.696-18.992-46.308-18.992s-34.060 6.744-46.308 18.992l-99.38 99.38c-12.248 12.25-18.992 28.696-18.992 46.308s6.744 34.060 18.992 46.308l163.38 163.382c12.248 12.246 28.696 18.992 46.308 18.992 10.538 0 20.644-2.43 29.696-6.988l65.338 65.336c-27.87 21.41-61.44 32.16-95.034 32.16-39.986 0-79.972-15.166-110.308-45.502l-163.38-163.382c-60.67-60.67-60.67-159.95 0-220.618l99.38-99.382c30.334-30.332 70.32-45.5 110.306-45.5 39.988 0 79.974 15.168 110.308 45.502l163.38 163.38c55.82 55.82 60.238 144.298 13.344 205.346l-65.34-65.338zM978.496 815.116l-99.38 99.382c-30.334 30.336-70.32 45.502-110.308 45.502-39.986 0-79.97-15.166-110.306-45.502l-163.382-163.382c-55.82-55.82-60.238-144.298-13.342-205.342l65.338 65.34c-4.558 9.050-6.988 19.16-6.988 29.694 0 17.616 6.744 34.060 18.992 46.308l163.382 163.382c12.246 12.248 28.694 18.994 46.306 18.994 17.616 0 34.060-6.746 46.308-18.994l99.38-99.382c12.248-12.248 18.992-28.694 18.992-46.308s-6.744-34.060-18.992-46.308l-163.38-163.382c-12.248-12.248-28.694-18.992-46.308-18.992-10.536 0-20.644 2.43-29.696 6.99l-65.338-65.338c27.872-21.41 61.44-32.16 95.034-32.16 39.988 0 79.974 15.168 110.308 45.504l163.38 163.38c60.672 60.666 60.672 159.944 0 220.614zM233.368 681.376l-191.994 191.994 45.256 45.256 191.994-191.994zM384 960h64v-192h-64zM0 576h192v-64h-192zM790.632 214.624l191.996-191.996-45.256-45.256-191.996 191.996zM576 128h64v-192h-64zM832 384h192v-64h-192z" />
+<glyph unicode="&#xe013;" d="M192 960v-1024l320 320 320-320v1024h-640zM768 90.51l-256 256-256-256v805.49h512v-805.49z" />
+<glyph unicode="&#xe014;" d="M0 832v-832h1024v832h-1024zM960 64h-896v704h896v-704zM704 608c0 53.019 42.981 96 96 96s96-42.981 96-96c0-53.019-42.981-96-96-96s-96 42.981-96 96zM896 128h-768l192 512 256-320 128 96z" />
+<glyph unicode="&#xe015;" d="M0 832v-768h1024v768h-1024zM192 128h-128v128h128v-128zM192 384h-128v128h128v-128zM192 640h-128v128h128v-128zM768 128h-512v640h512v-640zM960 128h-128v128h128v-128zM960 384h-128v128h128v-128zM960 640h-128v128h128v-128zM384 640v-384l256 192z" />
+<glyph unicode="&#xe016;" d="M448 256h128v-128h-128zM704 704c35.346 0 64-28.654 64-64v-192l-192-128h-128v64l192 128v64h-320v128h384zM512 864c-111.118 0-215.584-43.272-294.156-121.844s-121.844-183.038-121.844-294.156c0-111.118 43.272-215.584 121.844-294.156s183.038-121.844 294.156-121.844c111.118 0 215.584 43.272 294.156 121.844s121.844 183.038 121.844 294.156c0 111.118-43.272 215.584-121.844 294.156s-183.038 121.844-294.156 121.844zM512 960v0c282.77 0 512-229.23 512-512s-229.23-512-512-512c-282.77 0-512 229.23-512 512s229.23 512 512 512z" />
+<glyph unicode="&#xe017;" d="M320 704l-256-256 256-256h128l-256 256 256 256zM704 704h-128l256-256-256-256h128l256 256z" />
+<glyph unicode="&#xe018;" d="M512 768c-212.076 0-384-171.922-384-384s171.922-384 384-384c212.074 0 384 171.922 384 384s-171.926 384-384 384zM715.644 180.354c-54.392-54.396-126.716-84.354-203.644-84.354s-149.25 29.958-203.646 84.354c-54.396 54.394-84.354 126.718-84.354 203.646s29.958 149.25 84.354 203.646c54.396 54.396 126.718 84.354 203.646 84.354s149.252-29.958 203.642-84.354c54.402-54.396 84.358-126.718 84.358-203.646s-29.958-149.252-84.356-203.646zM325.93 756.138l-42.94 85.878c-98.874-49.536-179.47-130.132-229.006-229.008l85.876-42.94c40.248 80.336 105.732 145.822 186.070 186.070zM884.134 570.070l85.878 42.938c-49.532 98.876-130.126 179.472-229.004 229.008l-42.944-85.878c80.338-40.248 145.824-105.732 186.070-186.068zM512 576h-64v-192c0-10.11 4.7-19.11 12.022-24.972l-0.012-0.016 160-128 39.976 49.976-147.986 118.39v176.622z" />
+<glyph unicode="&#xe019;" d="M512 640c-209.368 0-395.244-100.556-512-256 116.756-155.446 302.632-256 512-256s395.244 100.554 512 256c-116.756 155.444-302.632 256-512 256zM448 512c35.346 0 64-28.654 64-64s-28.654-64-64-64-64 28.654-64 64 28.654 64 64 64zM773.616 254.704c-39.648-20.258-81.652-35.862-124.846-46.376-44.488-10.836-90.502-16.328-136.77-16.328-46.266 0-92.282 5.492-136.768 16.324-43.194 10.518-85.198 26.122-124.846 46.376-63.020 32.202-120.222 76.41-167.64 129.298 47.418 52.888 104.62 97.1 167.64 129.298 32.336 16.522 66.242 29.946 101.082 40.040-19.888-30.242-31.468-66.434-31.468-105.336 0-106.040 85.962-192 192-192s192 85.96 192 192c0 38.902-11.582 75.094-31.466 105.34 34.838-10.096 68.744-23.52 101.082-40.042 63.022-32.198 120.218-76.408 167.638-129.298-47.42-52.886-104.618-97.1-167.638-129.296zM860.918 716.278c-108.72 55.554-226.112 83.722-348.918 83.722s-240.198-28.168-348.918-83.722c-58.772-30.032-113.732-67.904-163.082-112.076v-109.206c55.338 58.566 120.694 107.754 192.194 144.29 99.62 50.904 207.218 76.714 319.806 76.714s220.186-25.81 319.804-76.716c71.502-36.536 136.858-85.724 192.196-144.29v109.206c-49.35 44.174-104.308 82.046-163.082 112.078z" />
+<glyph unicode="&#xe01a;" d="M322.018 128l57.6 192h264.764l57.6-192h113.632l-191.996 640h-223.236l-192-640h113.636zM475.618 640h72.764l57.6-192h-187.964l57.6 192z" />
+<glyph unicode="&#xe01b;" d="M0 896v-896h1024v896h-1024zM384 320v192h256v-192h-256zM640 256v-192h-256v192h256zM640 768v-192h-256v192h256zM320 768v-192h-256v192h256zM64 512h256v-192h-256v192zM704 512h256v-192h-256v192zM704 576v192h256v-192h-256zM64 256h256v-192h-256v192zM704 64v192h256v-192h-256z" />
+<glyph unicode="&#xe01c;" d="M0 512h1024v-128h-1024z" />
+<glyph unicode="&#xe01d;" d="M0 64h576v-128h-576zM192 960h704v-128h-704zM277.388 128l204.688 784.164 123.85-32.328-196.25-751.836zM929.774-64l-129.774 129.774-129.774-129.774-62.226 62.226 129.774 129.774-129.774 129.774 62.226 62.226 129.774-129.774 129.774 129.774 62.226-62.226-129.774-129.774 129.774-129.774z" />
+<glyph unicode="&#xe01e;" d="M768 50v-50h128v-64h-192v146l128 60v50h-128v64h192v-146zM676 704h-136l-188-188-188 188h-136l256-256-256-256h136l188 188 188-188h136l-256 256z" />
+<glyph unicode="&#xe01f;" d="M768 754v-50h128v-64h-192v146l128 60v50h-128v64h192v-146zM676 704h-136l-188-188-188 188h-136l256-256-256-256h136l188 188 188-188h136l-256 256z" />
+<glyph unicode="&#xe020;" d="M704 64h256l64 128v-256h-384v214.214c131.112 56.484 224 197.162 224 361.786 0 214.432-157.598 382.266-352 382.266-194.406 0-352-167.832-352-382.266 0-164.624 92.886-305.302 224-361.786v-214.214h-384v256l64-128h256v32.59c-187.63 66.46-320 227.402-320 415.41 0 247.424 229.23 448 512 448s512-200.576 512-448c0-188.008-132.37-348.95-320-415.41v-32.59z" />
+<glyph unicode="&#xe021;" d="M512 960c-282.77 0-512-229.228-512-512 0-282.77 229.228-512 512-512 282.77 0 512 229.23 512 512 0 282.772-229.23 512-512 512zM512 16c-238.586 0-432 193.412-432 432 0 238.586 193.414 432 432 432 238.59 0 432-193.414 432-432 0-238.588-193.41-432-432-432zM384 640c0-35.346-28.654-64-64-64s-64 28.654-64 64 28.654 64 64 64 64-28.654 64-64zM768 640c0-35.346-28.652-64-64-64s-64 28.654-64 64 28.652 64 64 64 64-28.654 64-64zM512 308c141.074 0 262.688 57.532 318.462 123.192-20.872-171.22-156.288-303.192-318.462-303.192-162.118 0-297.498 132.026-318.444 303.168 55.786-65.646 177.386-123.168 318.444-123.168z" />
+<glyph unicode="&#xe022;" d="M256 896h512v-128h-512zM960 704h-896c-35.2 0-64-28.8-64-64v-320c0-35.2 28.796-64 64-64h192v-256h512v256h192c35.2 0 64 28.8 64 64v320c0 35.2-28.8 64-64 64zM704 64h-384v320h384v-320zM974.4 608c0-25.626-20.774-46.4-46.398-46.4-25.626 0-46.402 20.774-46.402 46.4s20.776 46.4 46.402 46.4c25.626 0 46.398-20.774 46.398-46.4z" />
+<glyph unicode="&#xe023;" d="M1024 960v-384l-138.26 138.26-212-212-107.48 107.48 212 212-138.26 138.26zM245.74 821.74l212-212-107.48-107.48-212 212-138.26-138.26v384h384zM885.74 181.74l138.26 138.26v-384h-384l138.26 138.26-212 212 107.48 107.48zM457.74 286.26l-212-212 138.26-138.26h-384v384l138.26-138.26 212 212z" />
+<glyph unicode="&#xe024;" d="M128 704h128v-192h64v384c0 35.2-28.8 64-64 64h-128c-35.2 0-64-28.8-64-64v-384h64v192zM128 896h128v-128h-128v128zM960 896v64h-192c-35.202 0-64-28.8-64-64v-320c0-35.2 28.798-64 64-64h192v64h-192v320h192zM640 800v96c0 35.2-28.8 64-64 64h-192v-448h192c35.2 0 64 28.8 64 64v96c0 35.2-8.8 64-44 64 35.2 0 44 28.8 44 64zM576 576h-128v128h128v-128zM576 768h-128v128h128v-128zM832 384l-416-448-224 288 82 70 142-148 352 302z" />
+<glyph unicode="&#xe025;" d="M448 384h-192v128h192v192h128v-192h192v-128h-192v-192h-128zM1024 320v-384h-1024v384h128v-256h768v256z" />
+<glyph unicode="&#xe026;" d="M384 768h128v-64h-128zM576 768h128v-64h-128zM896 768v-256h-192v64h128v128h-64v64zM320 576h128v-64h-128zM512 576h128v-64h-128zM192 704v-128h64v-64h-128v256h192v-64zM384 384h128v-64h-128zM576 384h128v-64h-128zM896 384v-256h-192v64h128v128h-64v64zM320 192h128v-64h-128zM512 192h128v-64h-128zM192 320v-128h64v-64h-128v256h192v-64zM960 896h-896v-896h896v896zM1024 960v0-1024h-1024v1024h1024z" />
+<glyph unicode="&#xe027;" d="M0 448h128v-64h-128zM192 448h192v-64h-192zM448 448h128v-64h-128zM640 448h192v-64h-192zM896 448h128v-64h-128zM880 960l16-448h-768l16 448h32l16-384h640l16 384zM144-64l-16 384h768l-16-384h-32l-16 320h-640l-16-320z" />
+<glyph unicode="&#xe028;" d="M576 896c247.424 0 448-200.576 448-448s-200.576-448-448-448v96c94.024 0 182.418 36.614 248.902 103.098s103.098 154.878 103.098 248.902c0 94.022-36.614 182.418-103.098 248.902s-154.878 103.098-248.902 103.098c-94.022 0-182.418-36.614-248.902-103.098-51.14-51.138-84.582-115.246-97.306-184.902h186.208l-224-256-224 256h164.57c31.060 217.102 217.738 384 443.43 384zM768 512v-128h-256v320h128v-192z" />
+<glyph unicode="&#xe02a;" d="M707.88 475.348c37.498 44.542 60.12 102.008 60.12 164.652 0 141.16-114.842 256-256 256h-320v-896h384c141.158 0 256 114.842 256 256 0 92.956-49.798 174.496-124.12 219.348zM384 768h101.5c55.968 0 101.5-57.42 101.5-128s-45.532-128-101.5-128h-101.5v256zM543 128h-159v256h159c58.45 0 106-57.42 106-128s-47.55-128-106-128z" />
+<glyph unicode="&#xe02b;" d="M896 896v-64h-128l-320-768h128v-64h-448v64h128l320 768h-128v64z" />
+<glyph unicode="&#xe02c;" d="M704 896h128v-416c0-159.058-143.268-288-320-288-176.73 0-320 128.942-320 288v416h128v-416c0-40.166 18.238-78.704 51.354-108.506 36.896-33.204 86.846-51.494 140.646-51.494s103.75 18.29 140.646 51.494c33.116 29.802 51.354 68.34 51.354 108.506v416zM192 128h640v-128h-640z" />
+<glyph unicode="&#xe02d;" d="M731.42 442.964c63.92-47.938 100.58-116.086 100.58-186.964s-36.66-139.026-100.58-186.964c-59.358-44.518-137.284-69.036-219.42-69.036-82.138 0-160.062 24.518-219.42 69.036-63.92 47.938-100.58 116.086-100.58 186.964h128c0-69.382 87.926-128 192-128s192 58.618 192 128c0 69.382-87.926 128-192 128-82.138 0-160.062 24.518-219.42 69.036-63.92 47.94-100.58 116.086-100.58 186.964s36.66 139.024 100.58 186.964c59.358 44.518 137.282 69.036 219.42 69.036 82.136 0 160.062-24.518 219.42-69.036 63.92-47.94 100.58-116.086 100.58-186.964h-128c0 69.382-87.926 128-192 128s-192-58.618-192-128c0-69.382 87.926-128 192-128 82.136 0 160.062-24.518 219.42-69.036zM0 448h1024v-64h-1024z" />
+<glyph unicode="&#xe02e;" d="M384 896h512v-128h-128v-768h-128v768h-128v-768h-128v448c-123.712 0-224 100.288-224 224s100.288 224 224 224z" />
+<glyph unicode="&#xe02f;" d="M448 896h512v-128h-128v-768h-128v768h-128v-768h-128v448c-123.712 0-224 100.288-224 224s100.288 224 224 224zM64 512l256-224-256-224z" />
+<glyph unicode="&#xe030;" d="M256 896h512v-128h-128v-768h-128v768h-128v-768h-128v448c-123.712 0-224 100.288-224 224s100.288 224 224 224zM960 64l-256 224 256 224z" />
+<glyph unicode="&#xe031;" d="M832 704h-192v64l-192 192h-448v-768h384v-256h640v576l-192 192zM832 613.49l101.49-101.49h-101.49v101.49zM448 869.49l101.49-101.49h-101.49v101.49zM64 896h320v-192h192v-448h-512v640zM960 0h-512v192h192v448h128v-192h192v-448z" />
+<glyph unicode="&#xe032;" d="M768 704h64v-64h-64zM640 576h64v-64h-64zM640 448h64v-64h-64zM640 320h64v-64h-64zM512 448h64v-64h-64zM512 320h64v-64h-64zM384 320h64v-64h-64zM768 576h64v-64h-64zM768 448h64v-64h-64zM768 320h64v-64h-64zM768 192h64v-64h-64zM640 192h64v-64h-64zM512 192h64v-64h-64zM384 192h64v-64h-64zM256 192h64v-64h-64z" />
+<glyph unicode="&#xe033;" d="M128 416l288-288 480 480-128 128-352-352-160 160z" />
+<glyph unicode="&#xe034;" d="M928 832h-416l-32 64h-352l-64-128h896zM904.34 256h74.86l44.8 448h-1024l64-640h484.080c-104.882 37.776-180.080 138.266-180.080 256 0 149.982 122.018 272 272 272 149.98 0 272-122.018 272-272 0-21.678-2.622-43.15-7.66-64zM1002.996 46.25l-198.496 174.692c17.454 28.92 27.5 62.814 27.5 99.058 0 106.040-85.96 192-192 192s-192-85.96-192-192 85.96-192 192-192c36.244 0 70.138 10.046 99.058 27.5l174.692-198.496c22.962-26.678 62.118-28.14 87.006-3.252l5.492 5.492c24.888 24.888 23.426 64.044-3.252 87.006zM640 196c-68.484 0-124 55.516-124 124s55.516 124 124 124 124-55.516 124-124-55.516-124-124-124z" />
+<glyph unicode="&#xe035;" d="M512 448v-128h32l32 64h64v-256h-48v-64h224v64h-48v256h64l32-64h32v128zM832 640v160c0 17.6-14.4 32-32 32h-224v64c0 35.2-28.8 64-64 64h-128c-35.204 0-64-28.8-64-64v-64h-224c-17.602 0-32-14.4-32-32v-640c0-17.6 14.398-32 32-32h288v-192h640v704h-192zM384 895.886c0.034 0.038 0.072 0.078 0.114 0.114h127.768c0.042-0.036 0.082-0.076 0.118-0.114v-63.886h-128v63.886zM192 704v64h512v-64h-512zM960 0h-512v576h512v-576z" />
+<glyph unicode="&#xe600;" d="M483.2 320l-147.2 336c-9.6 25.6-19.2 44.8-25.6 54.4s-16 12.8-25.6 12.8c-16 0-25.6-3.2-28.8-3.2v70.4c9.6 6.4 25.6 6.4 38.4 9.6 32 0 57.6-6.4 73.6-22.4 6.4-6.4 12.8-16 19.2-25.6 6.4-12.8 12.8-25.6 16-41.6l121.6-291.2 150.4 371.2h92.8l-198.4-470.4v-224h-86.4v224zM0 960v-1024h1024v1024h-1024zM960 0h-896v896h896v-896z" />
+<glyph unicode="&#xe601;" d="M627.2 80h-579.2v396.8h579.2v-396.8zM553.6 406.4h-435.2v-256h435.2v256zM259.2 732.8c176 176 457.6 176 633.6 0s176-457.6 0-633.6c-121.6-121.6-297.6-160-454.4-108.8 121.6-28.8 262.4 9.6 361.6 108.8 150.4 150.4 160 384 22.4 521.6-121.6 121.6-320 128-470.4 19.2l86.4-86.4-294.4-22.4 22.4 294.4 92.8-92.8z" />
+<glyph unicode="&#xe602;" d="M892.8-22.4l-89.6 89.6c-70.4-80-172.8-131.2-288-131.2-208 0-380.8 166.4-384 377.6 0 0 0 0 0 0 0 3.2 0 3.2 0 6.4s0 3.2 0 6.4v0c0 0 0 0 0 3.2 0 0 0 3.2 0 3.2 3.2 105.6 48 211.2 105.6 304l-192 192 44.8 44.8 182.4-182.4c0 0 0 0 0 0l569.6-569.6c0 0 0 0 0 0l99.2-99.2-48-44.8zM896 326.4c0 0 0 0 0 0 0 3.2 0 6.4 0 6.4-9.6 316.8-384 627.2-384 627.2s-108.8-89.6-208-220.8l70.4-70.4c6.4 9.6 16 22.4 22.4 32 41.6 51.2 83.2 96 115.2 128v0c32-32 73.6-76.8 115.2-128 108.8-137.6 169.6-265.6 172.8-371.2 0 0 0-3.2 0-3.2v0 0c0-3.2 0-3.2 0-6.4s0-3.2 0-3.2v0 0c0-22.4-3.2-41.6-9.6-64l76.8-76.8c16 41.6 28.8 89.6 28.8 137.6 0 0 0 0 0 0 0 3.2 0 3.2 0 6.4s0 3.2 0 6.4z" />
+<glyph unicode="&#xe914;" d="M768 416v-352h-640v640h352l128 128h-512c-52.8 0-96-43.2-96-96v-704c0-52.8 43.2-96 96-96h704c52.798 0 96 43.2 96 96v512l-128-128zM864 960l-608-608v-160h160l608 608c0 96-64 160-160 160zM416 320l-48 48 480 480 48-48-480-480z" />
+<glyph unicode="&#xe934;" d="M864.626 486.838c-65.754 183.44-205.11 348.15-352.626 473.162-147.516-125.012-286.87-289.722-352.626-473.162-40.664-113.436-44.682-236.562 12.584-345.4 65.846-125.14 198.632-205.438 340.042-205.438s274.196 80.298 340.040 205.44c57.27 108.838 53.25 231.962 12.586 345.398zM738.764 201.044c-43.802-83.252-132.812-137.044-226.764-137.044-55.12 0-108.524 18.536-152.112 50.652 13.242-1.724 26.632-2.652 40.112-2.652 117.426 0 228.668 67.214 283.402 171.242 44.878 85.292 40.978 173.848 23.882 244.338 14.558-28.15 26.906-56.198 36.848-83.932 22.606-63.062 40.024-156.34-5.368-242.604z" />
+<glyph unicode="&#xeaa8;" d="M704 896c-247.424 0-448-200.576-448-448h-224l288-288 288 288h-224c0 176.73 143.27 320 320 320 176.732 0 320-143.27 320-320 0-176.732-143.268-320-320-320v-128c247.424 0 448 200.576 448 448s-200.576 448-448 448z" horiz-adv-x="1152" />
+<glyph unicode="&#xeaa9;" d="M448 896c247.424 0 448-200.576 448-448h224l-288-288-288 288h224c0 176.73-143.27 320-320 320-176.732 0-320-143.27-320-320 0-176.732 143.268-320 320-320v-128c-247.424 0-448 200.576-448 448s200.576 448 448 448z" horiz-adv-x="1152" />
+<glyph unicode="&#xeaaa;" d="M0 576h1024v384zM1024 0v384h-1024z" />
+<glyph unicode="&#xeaac;" d="M576 960v-1024h384zM0-64h384v1024z" />
+<glyph unicode="&#xeb35;" d="M992.262 88.604l-242.552 206.294c-25.074 22.566-51.89 32.926-73.552 31.926 57.256 67.068 91.842 154.078 91.842 249.176 0 212.078-171.922 384-384 384-212.076 0-384-171.922-384-384s171.922-384 384-384c95.098 0 182.108 34.586 249.176 91.844-1-21.662 9.36-48.478 31.926-73.552l206.294-242.552c35.322-39.246 93.022-42.554 128.22-7.356s31.892 92.898-7.354 128.22zM384 320c-141.384 0-256 114.616-256 256s114.616 256 256 256 256-114.616 256-256-114.614-256-256-256zM448 768h-128v-128h-128v-128h128v-128h128v128h128v128h-128z" />
+<glyph unicode="&#xeb36;" d="M992.262 88.604l-242.552 206.294c-25.074 22.566-51.89 32.926-73.552 31.926 57.256 67.068 91.842 154.078 91.842 249.176 0 212.078-171.922 384-384 384-212.076 0-384-171.922-384-384s171.922-384 384-384c95.098 0 182.108 34.586 249.176 91.844-1-21.662 9.36-48.478 31.926-73.552l206.294-242.552c35.322-39.246 93.022-42.554 128.22-7.356s31.892 92.898-7.354 128.22zM384 320c-141.384 0-256 114.616-256 256s114.616 256 256 256 256-114.616 256-256-114.614-256-256-256zM192 640h384v-128h-384z" />
+<glyph unicode="&#xeba7;" d="M768 832h-512l-256-256 512-576 512 576-256 256zM512 181.334v2.666h-2.37l-14.222 16h16.592v16h-30.814l-14.222 16h45.036v16h-59.258l-14.222 16h73.48v16h-87.704l-14.222 16h101.926v16h-116.148l-14.222 16h130.37v16h-144.592l-14.222 16h158.814v16h-173.038l-14.222 16h187.26v16h-201.482l-14.222 16h215.704v16h-229.926l-14.222 16h244.148v16h-258.372l-14.222 16h272.594v16h-286.816l-14.222 16h301.038v16h-315.26l-14.222 16h329.482v16h-343.706l-7.344 8.262 139.072 139.072h211.978v-3.334h215.314l16-16h-231.314v-16h247.314l16-16h-263.314v-16h279.314l16-16h-295.314v-16h311.314l16-16h-327.314v-16h343.312l7.738-7.738-351.050-394.928z" />
+<glyph unicode="&#xec6a;" d="M64 768h896v-192h-896zM64 512h896v-192h-896zM64 256h896v-192h-896z" />
+<glyph unicode="&#xeccc;" d="M512 128c35.346 0 64-28.654 64-64v-64c0-35.346-28.654-64-64-64s-64 28.654-64 64v64c0 35.346 28.654 64 64 64zM512 768c-35.346 0-64 28.654-64 64v64c0 35.346 28.654 64 64 64s64-28.654 64-64v-64c0-35.346-28.654-64-64-64zM960 512c35.346 0 64-28.654 64-64s-28.654-64-64-64h-64c-35.348 0-64 28.654-64 64s28.652 64 64 64h64zM192 448c0-35.346-28.654-64-64-64h-64c-35.346 0-64 28.654-64 64s28.654 64 64 64h64c35.346 0 64-28.654 64-64zM828.784 221.726l45.256-45.258c24.992-24.99 24.992-65.516 0-90.508-24.994-24.992-65.518-24.992-90.51 0l-45.256 45.256c-24.992 24.99-24.992 65.516 0 90.51 24.994 24.992 65.518 24.992 90.51 0zM195.216 674.274l-45.256 45.256c-24.994 24.994-24.994 65.516 0 90.51s65.516 24.994 90.51 0l45.256-45.256c24.994-24.994 24.994-65.516 0-90.51s-65.516-24.994-90.51 0zM828.784 674.274c-24.992-24.992-65.516-24.992-90.51 0-24.992 24.994-24.992 65.516 0 90.51l45.256 45.254c24.992 24.994 65.516 24.994 90.51 0 24.992-24.994 24.992-65.516 0-90.51l-45.256-45.254zM195.216 221.726c24.992 24.992 65.518 24.992 90.508 0 24.994-24.994 24.994-65.52 0-90.51l-45.254-45.256c-24.994-24.992-65.516-24.992-90.51 0s-24.994 65.518 0 90.508l45.256 45.258zM512 704c-141.384 0-256-114.616-256-256 0-141.382 114.616-256 256-256 141.382 0 256 114.618 256 256 0 141.384-114.616 256-256 256zM512 288c-88.366 0-160 71.634-160 160s71.634 160 160 160 160-71.634 160-160-71.634-160-160-160z" />
+<glyph unicode="&#xeccd;" d="M715.812 895.52c-60.25 34.784-124.618 55.904-189.572 64.48 122.936-160.082 144.768-384.762 37.574-570.42-107.2-185.67-312.688-279.112-512.788-252.68 39.898-51.958 90.376-97.146 150.628-131.934 245.908-141.974 560.37-57.72 702.344 188.198 141.988 245.924 57.732 560.372-188.186 702.356z" />
+<glyph unicode="&#xecd4;" d="M512 960c-282.77 0-512-229.23-512-512s229.23-512 512-512 512 229.23 512 512-229.23 512-512 512zM128 448c0 212.078 171.922 384 384 384v-768c-212.078 0-384 171.922-384 384z" />
+<glyph unicode="&#xed6a;" d="M893.254 738.746l-90.508 90.508-290.746-290.744-290.746 290.744-90.508-90.506 290.746-290.748-290.746-290.746 90.508-90.508 290.746 290.746 290.746-290.746 90.508 90.51-290.744 290.744z" />
+<glyph unicode="&#xedc0;" d="M672-64l192 192-320 320 320 320-192 192-512-512z" />
+<glyph unicode="&#xedf9;" d="M0 896v-384c0-35.346 28.654-64 64-64s64 28.654 64 64v229.488l677.488-677.488h-229.488c-35.346 0-64-28.652-64-64 0-35.346 28.654-64 64-64h384c35.346 0 64 28.654 64 64v384c0 35.348-28.654 64-64 64s-64-28.652-64-64v-229.488l-677.488 677.488h229.488c35.346 0 64 28.654 64 64s-28.652 64-64 64h-384c-35.346 0-64-28.654-64-64z" />
+<glyph unicode="&#xee78;" d="M832 704l192 192-64 64-192-192h-448v192h-128v-192h-192v-128h192v-512h512v-192h128v192h192v128h-192v448zM320 640h320l-320-320v320zM384 256l320 320v-320h-320z" />
+</font></defs></svg>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         /**
+ * Compiled inline version. (Library mode)
+ */
+
+/*jshint smarttabs:true, undef:true, latedef:true, curly:true, bitwise:true, camelcase:true */
+/*globals $code */
+
+(function(exports, undefined) {
+	"use strict";
+
+	var modules = {};
+
+	function require(ids, callback) {
+		var module, defs = [];
+
+		for (var i = 0; i < ids.length; ++i) {
+			module = modules[ids[i]] || resolve(ids[i]);
+			if (!module) {
+				throw 'module definition dependecy not found: ' + ids[i];
+			}
+
+			defs.push(module);
+		}
+
+		callback.apply(null, defs);
+	}
+
+	function define(id, dependencies, definition) {
+		if (typeof id !== 'string') {
+			throw 'invalid module definition, module id must be defined and be a string';
+		}
+
+		if (dependencies === undefined) {
+			throw 'invalid module definition, dependencies must be specified';
+		}
+
+		if (definition === undefined) {
+			throw 'invalid module definition, definition function must be specified';
+		}
+
+		require(dependencies, function() {
+			modules[id] = definition.apply(null, arguments);
+		});
+	}
+
+	function defined(id) {
+		return !!modules[id];
+	}
+
+	function resolve(id) {
+		var target = exports;
+		var fragments = id.split(/[.\/]/);
+
+		for (var fi = 0; fi < fragments.length; ++fi) {
+			if (!target[fragments[fi]]) {
+				return;
+			}
+
+			target = target[fragments[fi]];
+		}
+
+		return target;
+	}
+
+	function expose(ids) {
+		var i, target, id, fragments, privateModules;
+
+		for (i = 0; i < ids.length; i++) {
+			target = exports;
+			id = ids[i];
+			fragments = id.split(/[.\/]/);
+
+			for (var fi = 0; fi < fragments.length - 1; ++fi) {
+				if (target[fragments[fi]] === undefined) {
+					target[fragments[fi]] = {};
+				}
+
+				target = target[fragments[fi]];
+			}
+
+			target[fragments[fragments.length - 1]] = modules[id];
+		}
+		
+		// Expose private modules for unit tests
+		if (exports.AMDLC_TESTS) {
+			privateModules = exports.privateModules || {};
+
+			for (id in modules) {
+				privateModules[id] = modules[id];
+			}
+
+			for (i = 0; i < ids.length; i++) {
+				delete privateModules[ids[i]];
+			}
+
+			exports.privateModules = privateModules;
+		}
+	}
+
+// Included from: js/tinymce/plugins/paste/classes/Utils.js
+
+/**
+ * Utils.js
+ *
+ * Released under LGPL License.
+ * Copyright (c) 1999-2015 Ephox Corp. All rights reserved
+ *
+ * License: http://www.tinymce.com/license
+ * Contributing: http://www.tinymce.com/contributing
+ */
+
+/**
+ * This class contails various utility functions for the paste plugin.
+ *
+ * @class tinymce.pasteplugin.Utils
+ */
+define("tinymce/pasteplugin/Utils", [
+	"tinymce/util/Tools",
+	"tinymce/html/DomParser",
+	"tinymce/html/Schema"
+], function(Tools, DomParser, Schema) {
+	function filter(content, items) {
+		Tools.each(items, function(v) {
+			if (v.constructor == RegExp) {
+				content = content.replace(v, '');
+			} else {
+				content = content.replace(v[0], v[1]);
+			}
+		});
+
+		return content;
+	}
+
+	/**
+	 * Gets the innerText of the specified element. It will handle edge cases
+	 * and works better than textContent on Gecko.
+	 *
+	 * @param {String} html HTML string to get text from.
+	 * @return {String} String of text with line feeds.
+	 */
+	function innerText(html) {
+		var schema = new Schema(), domParser = new DomParser({}, schema), text = '';
+		var shortEndedElements = schema.getShortEndedElements();
+		var ignoreElements = Tools.makeMap('script noscript style textarea video audio iframe object', ' ');
+		var blockElements = schema.getBlockElements();
+
+		function walk(node) {
+			var name = node.name, currentNode = node;
+
+			if (name === 'br') {
+				text += '\n';
+				return;
+			}
+
+			// img/input/hr
+			if (shortEndedElements[name]) {
+				text += ' ';
+			}
+
+			// Ingore script, video contents
+			if (ignoreElements[name]) {
+				text += ' ';
+				return;
+			}
+
+			if (node.type == 3) {
+				text += node.value;
+			}
+
+			// Walk all children
+			if (!node.shortEnded) {
+				if ((node = node.firstChild)) {
+					do {
+						walk(node);
+					} while ((node = node.next));
+				}
+			}
+
+			// Add \n or \n\n for blocks or P
+			if (blockElements[name] && currentNode.next) {
+				text += '\n';
+
+				if (name == 'p') {
+					text += '\n';
+				}
+			}
+		}
+
+		html = filter(html, [
+			/<!\[[^\]]+\]>/g // Conditional comments
+		]);
+
+		walk(domParser.parse(html));
+
+		return text;
+	}
+
+	/**
+	 * Trims the specified HTML by removing all WebKit fragments, all elements wrapping the body trailing BR elements etc.
+	 *
+	 * @param {String} html Html string to trim contents on.
+	 * @return {String} Html contents that got trimmed.
+	 */
+	function trimHtml(html) {
+		function trimSpaces(all, s1, s2) {
+			// WebKit &nbsp; meant to preserve multiple spaces but instead inserted around all inline tags,
+			// including the spans with inline styles created on paste
+			if (!s1 && !s2) {
+				return ' ';
+			}
+
+			return '\u00a0';
+		}
+
+		html = filter(html, [
+			/^[\s\S]*<body[^>]*>\s*|\s*<\/body[^>]*>[\s\S]*$/g, // Remove anything but the contents within the BODY element
+			/<!--StartFragment-->|<!--EndFragment-->/g, // Inner fragments (tables from excel on mac)
+			[/( ?)<span class="Apple-converted-space">\u00a0<\/span>( ?)/g, trimSpaces],
+			/<br>$/i // Trailing BR elements
+		]);
+
+		return html;
+	}
+
+	return {
+		filter: filter,
+		innerText: innerText,
+		trimHtml: trimHtml
+	};
+});
+
+// Included from: js/tinymce/plugins/paste/classes/Clipboard.js
+
+/**
+ * Clipboard.js
+ *
+ * Released under LGPL License.
+ * Copyright (c) 1999-2015 Ephox Corp. All rights reserved
+ *
+ * License: http://www.tinymce.com/license
+ * Contributing: http://www.tinymce.com/contributing
+ */
+
+/**
+ * This class contains logic for getting HTML contents out of the clipboard.
+ *
+ * We need to make a lot of ugly hacks to get the contents out of the clipboard since
+ * the W3C Clipboard API is broken in all browsers that have it: Gecko/WebKit/Blink.
+ * We might rewrite this the way those API:s stabilize. Browsers doesn't handle pasting
+ * from applications like Word the same way as it does when pasting into a contentEditable area
+ * so we need to do lots of extra work to try to get to this clipboard data.
+ *
+ * Current implementation steps:
+ *  1. On keydown with paste keys Ctrl+V or Shift+Insert create
+ *     a paste bin element and move focus to that element.
+ *  2. Wait for the browser to fire a "paste" event and get the contents out of the paste bin.
+ *  3. Check if the paste was successful if true, process the HTML.
+ *  (4). If the paste was unsuccessful use IE execCommand, Clipboard API, document.dataTransfer old WebKit API etc.
+ *
+ * @class tinymce.pasteplugin.Clipboard
+ * @private
+ */
+define("tinymce/pasteplugin/Clipboard", [
+	"tinymce/Env",
+	"tinymce/dom/RangeUtils",
+	"tinymce/util/VK",
+	"tinymce/pasteplugin/Utils"
+], function(Env, RangeUtils, VK, Utils) {
+	return function(editor) {
+		var self = this, pasteBinElm, lastRng, keyboardPasteTimeStamp = 0, draggingInternally = false;
+		var pasteBinDefaultContent = '%MCEPASTEBIN%', keyboardPastePlainTextState;
+		var mceInternalUrlPrefix = 'data:text/mce-internal,';
+
+		/**
+		 * Pastes the specified HTML. This means that the HTML is filtered and then
+		 * inserted at the current selection in the editor. It will also fire paste events
+		 * for custom user filtering.
+		 *
+		 * @param {String} html HTML code to paste into the current selection.
+		 */
+		function pasteHtml(html) {
+			var args, dom = editor.dom;
+
+			args = editor.fire('BeforePastePreProcess', {content: html}); // Internal event used by Quirks
+			args = editor.fire('PastePreProcess', args);
+			html = args.content;
+
+			if (!args.isDefaultPrevented()) {
+				// User has bound PastePostProcess events then we need to pass it through a DOM node
+				// This is not ideal but we don't want to let the browser mess up the HTML for example
+				// some browsers add &nbsp; to P tags etc
+				if (editor.hasEventListeners('PastePostProcess') && !args.isDefaultPrevented()) {
+					// We need to attach the element to the DOM so Sizzle selectors work on the contents
+					var tempBody = dom.add(editor.getBody(), 'div', {style: 'display:none'}, html);
+					args = editor.fire('PastePostProcess', {node: tempBody});
+					dom.remove(tempBody);
+					html = args.node.innerHTML;
+				}
+
+				if (!args.isDefaultPrevented()) {
+					editor.insertContent(html, {merge: editor.settings.paste_merge_formats !== false, data: {paste: true}});
+				}
+			}
+		}
+
+		/**
+		 * Pastes the specified text. This means that the plain text is processed
+		 * and converted into BR and P elements. It will fire paste events for custom filtering.
+		 *
+		 * @param {String} text Text to paste as the current selection location.
+		 */
+		function pasteText(text) {
+			text = editor.dom.encode(text).replace(/\r\n/g, '\n');
+
+			var startBlock = editor.dom.getParent(editor.selection.getStart(), editor.dom.isBlock);
+
+			// Create start block html for example <p attr="value">
+			var forcedRootBlockName = editor.settings.forced_root_block;
+			var forcedRootBlockStartHtml;
+			if (forcedRootBlockName) {
+				forcedRootBlockStartHtml = editor.dom.createHTML(forcedRootBlockName, editor.settings.forced_root_block_attrs);
+				forcedRootBlockStartHtml = forcedRootBlockStartHtml.substr(0, forcedRootBlockStartHtml.length - 3) + '>';
+			}
+
+			if ((startBlock && /^(PRE|DIV)$/.test(startBlock.nodeName)) || !forcedRootBlockName) {
+				text = Utils.filter(text, [
+					[/\n/g, "<br>"]
+				]);
+			} else {
+				text = Utils.filter(text, [
+					[/\n\n/g, "</p>" + forcedRootBlockStartHtml],
+					[/^(.*<\/p>)(<p>)$/, forcedRootBlockStartHtml + '$1'],
+					[/\n/g, "<br />"]
+				]);
+
+				if (text.indexOf('<p>') != -1) {
+					text = forcedRootBlockStartHtml + text;
+				}
+			}
+
+			pasteHtml(text);
+		}
+
+		/**
+		 * Creates a paste bin element as close as possible to the current caret location and places the focus inside that element
+		 * so that when the real paste event occurs the contents gets inserted into this element
+		 * instead of the current editor selection element.
+		 */
+		function createPasteBin() {
+			var dom = editor.dom, body = editor.getBody();
+			var viewport = editor.dom.getViewPort(editor.getWin()), scrollTop = viewport.y, top = 20;
+			var scrollContainer;
+
+			lastRng = editor.selection.getRng();
+
+			if (editor.inline) {
+				scrollContainer = editor.selection.getScrollContainer();
+
+				// Can't always rely on scrollTop returning a useful value.
+				// It returns 0 if the browser doesn't support scrollTop for the element or is non-scrollable
+				if (scrollContainer && scrollContainer.scrollTop > 0) {
+					scrollTop = scrollContainer.scrollTop;
+				}
+			}
+
+			/**
+			 * Returns the rect of the current caret if the caret is in an empty block before a
+			 * BR we insert a temporary invisible character that we get the rect this way we always get a proper rect.
+			 *
+			 * TODO: This might be useful in core.
+			 */
+			function getCaretRect(rng) {
+				var rects, textNode, node, container = rng.startContainer;
+
+				rects = rng.getClientRects();
+				if (rects.length) {
+					return rects[0];
+				}
+
+				if (!rng.collapsed || container.nodeType != 1) {
+					return;
+				}
+
+				node = container.childNodes[lastRng.startOffset];
+
+				// Skip empty whitespace nodes
+				while (node && node.nodeType == 3 && !node.data.length) {
+					node = node.nextSibling;
+				}
+
+				if (!node) {
+					return;
+				}
+
+				// Check if the location is |<br>
+				// TODO: Might need to expand this to say |<table>
+				if (node.tagName == 'BR') {
+					textNode = dom.doc.createTextNode('\uFEFF');
+					node.parentNode.insertBefore(textNode, node);
+
+					rng = dom.createRng();
+					rng.setStartBefore(textNode);
+					rng.setEndAfter(textNode);
+
+					rects = rng.getClientRects();
+					dom.remove(textNode);
+				}
+
+				if (rects.length) {
+					return rects[0];
+				}
+			}
+
+			// Calculate top cordinate this is needed to avoid scrolling to top of document
+			// We want the paste bin to be as close to the caret as possible to avoid scrolling
+			if (lastRng.getClientRects) {
+				var rect = getCaretRect(lastRng);
+
+				if (rect) {
+					// Client rects gets us closes to the actual
+					// caret location in for example a wrapped paragraph block
+					top = scrollTop + (rect.top - dom.getPos(body).y);
+				} else {
+					top = scrollTop;
+
+					// Check if we can find a closer location by checking the range element
+					var container = lastRng.startContainer;
+					if (container) {
+						if (container.nodeType == 3 && container.parentNode != body) {
+							container = container.parentNode;
+						}
+
+						if (container.nodeType == 1) {
+							top = dom.getPos(container, scrollContainer || body).y;
+						}
+					}
+				}
+			}
+
+			// Create a pastebin
+			pasteBinElm = dom.add(editor.getBody(), 'div', {
+				id: "mcepastebin",
+				contentEditable: true,
+				"data-mce-bogus": "all",
+				style: 'position: absolute; top: ' + top + 'px;' +
+					'width: 10px; height: 10px; overflow: hidden; opacity: 0'
+			}, pasteBinDefaultContent);
+
+			// Move paste bin out of sight since the controlSelection rect gets displayed otherwise on IE and Gecko
+			if (Env.ie || Env.gecko) {
+				dom.setStyle(pasteBinElm, 'left', dom.getStyle(body, 'direction', true) == 'rtl' ? 0xFFFF : -0xFFFF);
+			}
+
+			// Prevent focus events from bubbeling fixed FocusManager issues
+			dom.bind(pasteBinElm, 'beforedeactivate focusin focusout', function(e) {
+				e.stopPropagation();
+			});
+
+			pasteBinElm.focus();
+			editor.selection.select(pasteBinElm, true);
+		}
+
+		/**
+		 * Removes the paste bin if it exists.
+		 */
+		function removePasteBin() {
+			if (pasteBinElm) {
+				var pasteBinClone;
+
+				// WebKit/Blink might clone the div so
+				// lets make sure we remove all clones
+				// TODO: Man o man is this ugly. WebKit is the new IE! Remove this if they ever fix it!
+				while ((pasteBinClone = editor.dom.get('mcepastebin'))) {
+					editor.dom.remove(pasteBinClone);
+					editor.dom.unbind(pasteBinClone);
+				}
+
+				if (lastRng) {
+					editor.selection.setRng(lastRng);
+				}
+			}
+
+			pasteBinElm = lastRng = null;
+		}
+
+		/**
+		 * Returns the contents of the paste bin as a HTML string.
+		 *
+		 * @return {String} Get the contents of the paste bin.
+		 */
+		function getPasteBinHtml() {
+			var html = '', pasteBinClones, i, clone, cloneHtml;
+
+			// Since WebKit/Chrome might clone the paste bin when pasting
+			// for example: <img style="float: right"> we need to check if any of them contains some useful html.
+			// TODO: Man o man is this ugly. WebKit is the new IE! Remove this if they ever fix it!
+			pasteBinClones = editor.dom.select('div[id=mcepastebin]');
+			for (i = 0; i < pasteBinClones.length; i++) {
+				clone = pasteBinClones[i];
+
+				// Pasting plain text produces pastebins in pastebinds makes sence right!?
+				if (clone.firstChild && clone.firstChild.id == 'mcepastebin') {
+					clone = clone.firstChild;
+				}
+
+				cloneHtml = clone.innerHTML;
+				if (html != pasteBinDefaultContent) {
+					html += cloneHtml;
+				}
+			}
+
+			return html;
+		}
+
+		/**
+		 * Gets various content types out of a datatransfer object.
+		 *
+		 * @param {DataTransfer} dataTransfer Event fired on paste.
+		 * @return {Object} Object with mime types and data for those mime types.
+		 */
+		function getDataTransferItems(dataTransfer) {
+			var data = {};
+
+			if (dataTransfer) {
+				// Use old WebKit/IE API
+				if (dataTransfer.getData) {
+					var legacyText = dataTransfer.getData('Text');
+					if (legacyText && legacyText.length > 0) {
+						if (legacyText.indexOf(mceInternalUrlPrefix) == -1) {
+							data['text/plain'] = legacyText;
+						}
+					}
+				}
+
+				if (dataTransfer.types) {
+					for (var i = 0; i < dataTransfer.types.length; i++) {
+						var contentType = dataTransfer.types[i];
+						data[contentType] = dataTransfer.getData(contentType);
+					}
+				}
+			}
+
+			return data;
+		}
+
+		/**
+		 * Gets various content types out of the Clipboard API. It will also get the
+		 * plain text using older IE and WebKit API:s.
+		 *
+		 * @param {ClipboardEvent} clipboardEvent Event fired on paste.
+		 * @return {Object} Object with mime types and data for those mime types.
+		 */
+		function getClipboardContent(clipboardEvent) {
+			return getDataTransferItems(clipboardEvent.clipboardData || editor.getDoc().dataTransfer);
+		}
+
+		/**
+		 * Checks if the clipboard contains image data if it does it will take that data
+		 * and convert it into a data url image and paste that image at the caret location.
+		 *
+		 * @param  {ClipboardEvent} e Paste/drop event object.
+		 * @param  {DOMRange} rng Optional rng object to move selection to.
+		 * @return {Boolean} true/false if the image data was found or not.
+		 */
+		function pasteImageData(e, rng) {
+			var dataTransfer = e.clipboardData || e.dataTransfer;
+
+			function processItems(items) {
+				var i, item, reader, hadImage = false;
+
+				function pasteImage(reader) {
+					if (rng) {
+						editor.selection.setRng(rng);
+						rng = null;
+					}
+
+					pasteHtml('<img src="' + reader.result + '">');
+				}
+
+				if (items) {
+					for (i = 0; i < items.length; i++) {
+						item = items[i];
+
+						if (/^image\/(jpeg|png|gif|bmp)$/.test(item.type)) {
+							reader = new FileReader();
+							reader.onload = pasteImage.bind(null, reader);
+							reader.readAsDataURL(item.getAsFile ? item.getAsFile() : item);
+
+							e.preventDefault();
+							hadImage = true;
+						}
+					}
+				}
+
+				return hadImage;
+			}
+
+			if (editor.settings.paste_data_images && dataTransfer) {
+				return processItems(dataTransfer.items) || processItems(dataTransfer.files);
+			}
+		}
+
+		/**
+		 * Chrome on Android doesn't support proper clipboard access so we have no choice but to allow the browser default behavior.
+		 *
+		 * @param {Event} e Paste event object to check if it contains any data.
+		 * @return {Boolean} true/false if the clipboard is empty or not.
+		 */
+		function isBrokenAndroidClipboardEvent(e) {
+			var clipboardData = e.clipboardData;
+
+			return navigator.userAgent.indexOf('Android') != -1 && clipboardData && clipboardData.items && clipboardData.items.length === 0;
+		}
+
+		function getCaretRangeFromEvent(e) {
+			return RangeUtils.getCaretRangeFromPoint(e.clientX, e.clientY, editor.getDoc());
+		}
+
+		function hasContentType(clipboardContent, mimeType) {
+			return mimeType in clipboardContent && clipboardContent[mimeType].length > 0;
+		}
+
+		function isKeyboardPasteEvent(e) {
+			return (VK.metaKeyPressed(e) && e.keyCode == 86) || (e.shiftKey && e.keyCode == 45);
+		}
+
+		function registerEventHandlers() {
+			editor.on('keydown', function(e) {
+				function removePasteBinOnKeyUp(e) {
+					// Ctrl+V or Shift+Insert
+					if (isKeyboardPasteEvent(e) && !e.isDefaultPrevented()) {
+						removePasteBin();
+					}
+				}
+
+				// Ctrl+V or Shift+Insert
+				if (isKeyboardPasteEvent(e) && !e.isDefaultPrevented()) {
+					keyboardPastePlainTextState = e.shiftKey && e.keyCode == 86;
+
+					// Edge case on Safari on Mac where it doesn't handle Cmd+Shift+V correctly
+					// it fires the keydown but no paste or keyup so we are left with a paste bin
+					if (keyboardPastePlainTextState && Env.webkit && navigator.userAgent.indexOf('Version/') != -1) {
+						return;
+					}
+
+					// Prevent undoManager keydown handler from making an undo level with the pastebin in it
+					e.stopImmediatePropagation();
+
+					keyboardPasteTimeStamp = new Date().getTime();
+
+					// IE doesn't support Ctrl+Shift+V and it doesn't even produce a paste event
+					// so lets fake a paste event and let IE use the execCommand/dataTransfer methods
+					if (Env.ie && keyboardPastePlainTextState) {
+						e.preventDefault();
+						editor.fire('paste', {ieFake: true});
+						return;
+					}
+
+					removePasteBin();
+					createPasteBin();
+
+					// Remove pastebin if we get a keyup and no paste event
+					// For example pasting a file in IE 11 will not produce a paste event
+					editor.once('keyup', removePasteBinOnKeyUp);
+					editor.once('paste', function() {
+						editor.off('keyup', removePasteBinOnKeyUp);
+					});
+				}
+			});
+
+			editor.on('paste', function(e) {
+				// Getting content from the Clipboard can take some time
+				var clipboardTimer = new Date().getTime();
+				var clipboardContent = getClipboardContent(e);
+				var clipboardDelay = new Date().getTime() - clipboardTimer;
+
+				var isKeyBoardPaste = (new Date().getTime() - keyboardPasteTimeStamp - clipboardDelay) < 1000;
+				var plainTextMode = self.pasteFormat == "text" || keyboardPastePlainTextState;
+
+				keyboardPastePlainTextState = false;
+
+				if (e.isDefaultPrevented() || isBrokenAndroidClipboardEvent(e)) {
+					removePasteBin();
+					return;
+				}
+
+				if (pasteImageData(e)) {
+					removePasteBin();
+					return;
+				}
+
+				// Not a keyboard paste prevent default paste and try to grab the clipboard contents using different APIs
+				if (!isKeyBoardPaste) {
+					e.preventDefault();
+				}
+
+				// Try IE only method if paste isn't a keyboard paste
+				if (Env.ie && (!isKeyBoardPaste || e.ieFake)) {
+					createPasteBin();
+
+					editor.dom.bind(pasteBinElm, 'paste', function(e) {
+						e.stopPropagation();
+					});
+
+					editor.getDoc().execCommand('Paste', false, null);
+					clipboardContent["text/html"] = getPasteBinHtml();
+				}
+
+				setTimeout(function() {
+					var content;
+
+					// Grab HTML from Clipboard API or paste bin as a fallback
+					if (hasContentType(clipboardContent, 'text/html')) {
+						content = clipboardContent['text/html'];
+					} else {
+						content = getPasteBinHtml();
+
+						// If paste bin is empty try using plain text mode
+						// since that is better than nothing right
+						if (content == pasteBinDefaultConten

@@ -1,0 +1,577 @@
+se)
+ * @return int
+ */
+function wc_set_term_order( $term_id, $index, $taxonomy, $recursive = false ) {
+
+	$term_id 	= (int) $term_id;
+	$index 		= (int) $index;
+
+	// Meta name
+	if ( taxonomy_is_product_attribute( $taxonomy ) )
+		$meta_name =  'order_' . esc_attr( $taxonomy );
+	else
+		$meta_name = 'order';
+
+	update_woocommerce_term_meta( $term_id, $meta_name, $index );
+
+	if( ! $recursive ) return $index;
+
+	$children = get_terms($taxonomy, "parent=$term_id&menu_order=ASC&hide_empty=0");
+
+	foreach ( $children as $term ) {
+		$index ++;
+		$index = wc_set_term_order($term->term_id, $index, $taxonomy, true);
+	}
+
+	clean_term_cache( $term_id, $taxonomy );
+
+	return $index;
+}
+
+/**
+ * Add term ordering to get_terms.
+ *
+ * It enables the support a 'menu_order' parameter to get_terms for the product_cat taxonomy.
+ * By default it is 'ASC'. It accepts 'DESC' too.
+ *
+ * To disable it, set it ot false (or 0).
+ *
+ * @param array $clauses
+ * @param array $taxonomies
+ * @param array $args
+ * @return array
+ */
+function wc_terms_clauses( $clauses, $taxonomies, $args ) {
+	global $wpdb;
+
+	// No sorting when menu_order is false
+	if ( isset( $args['menu_order'] ) && $args['menu_order'] == false ) {
+		return $clauses;
+	}
+
+	// No sorting when orderby is non default
+	if ( isset( $args['orderby'] ) && $args['orderby'] != 'name' ) {
+		return $clauses;
+	}
+
+	// No sorting in admin when sorting by a column
+	if ( is_admin() && isset( $_GET['orderby'] ) ) {
+		return $clauses;
+	}
+
+	// wordpress should give us the taxonomies asked when calling the get_terms function. Only apply to categories and pa_ attributes
+	$found = false;
+	foreach ( (array) $taxonomies as $taxonomy ) {
+		if ( taxonomy_is_product_attribute( $taxonomy ) || in_array( $taxonomy, apply_filters( 'woocommerce_sortable_taxonomies', array( 'product_cat' ) ) ) ) {
+			$found = true;
+			break;
+		}
+	}
+	if ( ! $found ) {
+		return $clauses;
+	}
+
+	// Meta name
+	if ( ! empty( $taxonomies[0] ) && taxonomy_is_product_attribute( $taxonomies[0] ) ) {
+		$meta_name =  'order_' . esc_attr( $taxonomies[0] );
+	} else {
+		$meta_name = 'order';
+	}
+
+	// query fields
+	if ( strpos( 'COUNT(*)', $clauses['fields'] ) === false )  {
+		$clauses['fields']  .= ', tm.* ';
+	}
+
+	//query join
+	$clauses['join'] .= " LEFT JOIN {$wpdb->woocommerce_termmeta} AS tm ON (t.term_id = tm.woocommerce_term_id AND tm.meta_key = '". $meta_name ."') ";
+
+	// default to ASC
+	if ( ! isset( $args['menu_order'] ) || ! in_array( strtoupper($args['menu_order']), array('ASC', 'DESC')) ) {
+		$args['menu_order'] = 'ASC';
+	}
+
+	$order = "ORDER BY tm.meta_value+0 " . $args['menu_order'];
+
+	if ( $clauses['orderby'] ):
+		$clauses['orderby'] = str_replace('ORDER BY', $order . ',', $clauses['orderby'] );
+	else:
+		$clauses['orderby'] = $order;
+	endif;
+
+	return $clauses;
+}
+add_filter( 'terms_clauses', 'wc_terms_clauses', 10, 3 );
+
+/**
+ * Function for recounting product terms, ignoring hidden products.
+ *
+ * @param  array $terms
+ * @param  string $taxonomy
+ * @param  bool $callback
+ * @param  bool $terms_are_term_taxonomy_ids
+ */
+function _wc_term_recount( $terms, $taxonomy, $callback = true, $terms_are_term_taxonomy_ids = true ) {
+	global $wpdb;
+
+	// Standard callback
+	if ( $callback ) {
+		_update_post_term_count( $terms, $taxonomy );
+	}
+
+	// Stock query
+	if ( get_option( 'woocommerce_hide_out_of_stock_items' ) == 'yes' ) {
+		$stock_join  = "LEFT JOIN {$wpdb->postmeta} AS meta_stock ON posts.ID = meta_stock.post_id";
+		$stock_query = "
+		AND meta_stock.meta_key = '_stock_status'
+		AND meta_stock.meta_value = 'instock'
+		";
+	} else {
+		$stock_query = $stock_join = '';
+	}
+
+	// Main query
+	$count_query = "
+		SELECT COUNT( DISTINCT posts.ID ) FROM {$wpdb->posts} as posts
+		LEFT JOIN {$wpdb->postmeta} AS meta_visibility ON posts.ID = meta_visibility.post_id
+		LEFT JOIN {$wpdb->term_relationships} AS rel ON posts.ID=rel.object_ID
+		LEFT JOIN {$wpdb->term_taxonomy} AS tax USING( term_taxonomy_id )
+		LEFT JOIN {$wpdb->terms} AS term USING( term_id )
+		LEFT JOIN {$wpdb->postmeta} AS postmeta ON posts.ID = postmeta.post_id
+		$stock_join
+		WHERE 	post_status = 'publish'
+		AND 	post_type 	= 'product'
+		AND 	meta_visibility.meta_key = '_visibility'
+		AND 	meta_visibility.meta_value IN ( 'visible', 'catalog' )
+		$stock_query
+	";
+
+	// Pre-process term taxonomy ids
+	if ( ! $terms_are_term_taxonomy_ids ) {
+		// We passed in an array of TERMS in format id=>parent
+		$terms = array_filter( (array) array_keys( $terms ) );
+	} else {
+		// If we have term taxonomy IDs we need to get the term ID
+		$term_taxonomy_ids = $terms;
+		$terms             = array();
+		foreach ( $term_taxonomy_ids as $term_taxonomy_id ) {
+			$term    = get_term_by( 'term_taxonomy_id', $term_taxonomy_id, $taxonomy->name );
+			$terms[] = $term->term_id;
+		}
+	}
+
+	// Exit if we have no terms to count
+	if ( ! $terms ) {
+		return;
+	}
+
+	// Ancestors need counting
+	if ( is_taxonomy_hierarchical( $taxonomy->name ) ) {
+		foreach ( $terms as $term_id ) {
+			$terms = array_merge( $terms, get_ancestors( $term_id, $taxonomy->name ) );
+		}
+	}
+
+	// Unique terms only
+	$terms = array_unique( $terms );
+
+	// Count the terms
+	foreach ( $terms as $term_id ) {
+		$terms_to_count = array( absint( $term_id ) );
+
+		if ( is_taxonomy_hierarchical( $taxonomy->name ) ) {
+			// We need to get the $term's hierarchy so we can count its children too
+			if ( ( $children = get_term_children( $term_id, $taxonomy->name ) ) && ! is_wp_error( $children ) ) {
+				$terms_to_count = array_unique( array_map( 'absint', array_merge( $terms_to_count, $children ) ) );
+			}
+		}
+
+		// Generate term query
+		$term_query = 'AND term_id IN ( ' . implode( ',', $terms_to_count ) . ' )';
+
+		// Get the count
+		$count = $wpdb->get_var( $count_query . $term_query );
+
+		// Update the count
+		update_woocommerce_term_meta( $term_id, 'product_count_' . $taxonomy->name, absint( $count ) );
+	}
+
+	delete_transient( 'wc_term_counts' );
+}
+
+/**
+ * Recount terms after the stock amount changes.
+ *
+ * @param int $product_id
+ */
+function wc_recount_after_stock_change( $product_id ) {
+	if ( get_option( 'woocommerce_hide_out_of_stock_items' ) != 'yes' )
+		return;
+
+	$product_terms = get_the_terms( $product_id, 'product_cat' );
+
+	if ( $product_terms ) {
+		$product_cats = array();
+
+		foreach ( $product_terms as $term ) {
+			$product_cats[ $term->term_id ] = $term->parent;
+		}
+
+		_wc_term_recount( $product_cats, get_taxonomy( 'product_cat' ), false, false );
+	}
+
+	$product_terms = get_the_terms( $product_id, 'product_tag' );
+
+	if ( $product_terms ) {
+		$product_tags = array();
+
+		foreach ( $product_terms as $term ) {
+			$product_tags[ $term->term_id ] = $term->parent;
+		}
+
+		_wc_term_recount( $product_tags, get_taxonomy( 'product_tag' ), false, false );
+	}
+}
+add_action( 'woocommerce_product_set_stock_status', 'wc_recount_after_stock_change' );
+
+
+/**
+ * Overrides the original term count for product categories and tags with the product count.
+ * that takes catalog visibility into account.
+ *
+ * @param array $terms
+ * @param string|array $taxonomies
+ * @return array
+ */
+function wc_change_term_counts( $terms, $taxonomies ) {
+	if ( is_admin() || is_ajax() ) {
+		return $terms;
+	}
+
+	if ( ! isset( $taxonomies[0] ) || ! in_array( $taxonomies[0], apply_filters( 'woocommerce_change_term_counts', array( 'product_cat', 'product_tag' ) ) ) ) {
+		return $terms;
+	}
+
+	$term_counts = $o_term_counts = get_transient( 'wc_term_counts' );
+
+	foreach ( $terms as &$term ) {
+		if ( is_object( $term ) ) {
+			$term_counts[ $term->term_id ] = isset( $term_counts[ $term->term_id ] ) ? $term_counts[ $term->term_id ] : get_woocommerce_term_meta( $term->term_id, 'product_count_' . $taxonomies[0] , true );
+
+			if ( $term_counts[ $term->term_id ] !== '' ) {
+				$term->count = absint( $term_counts[ $term->term_id ] );
+			}
+		}
+	}
+
+	// Update transient
+	if ( $term_counts != $o_term_counts ) {
+		set_transient( 'wc_term_counts', $term_counts, DAY_IN_SECONDS * 30 );
+	}
+
+	return $terms;
+}
+add_filter( 'get_terms', 'wc_change_term_counts', 10, 2 );
+
+/**
+ * Return products in a given term, and cache value.
+ *
+ * To keep in sync, product_count will be cleared on "set_object_terms".
+ *
+ * @param int $term_id
+ * @param string $taxonomy
+ * @return array
+ */
+function wc_get_term_product_ids( $term_id, $taxonomy ) {
+	$product_ids = get_woocommerce_term_meta( $term_id, 'product_ids', true );
+
+	if ( false === $product_ids || ! is_array( $product_ids ) ) {
+		$product_ids = get_objects_in_term( $term_id, $taxonomy );
+		update_woocommerce_term_meta( $term_id, 'product_ids', $product_ids );
+	}
+
+	return $product_ids;
+}
+
+/**
+ * When a post is updated and terms recounted (called by _update_post_term_count), clear the ids.
+ * @param int $term_id
+ * @param int    $object_id  Object ID.
+ * @param array  $terms      An array of object terms.
+ * @param array  $tt_ids     An array of term taxonomy IDs.
+ * @param string $taxonomy   Taxonomy slug.
+ * @param bool   $append     Whether to append new terms to the old terms.
+ * @param array  $old_tt_ids Old array of term taxonomy IDs.
+ */
+function wc_clear_term_product_ids( $object_id, $terms, $tt_ids, $taxonomy, $append, $old_tt_ids ) {
+	foreach ( $old_tt_ids as $term_id ) {
+		delete_woocommerce_term_meta( $term_id, 'product_ids' );
+	}
+	foreach ( $tt_ids as $term_id ) {
+		delete_woocommerce_term_meta( $term_id, 'product_ids' );
+	}
+}
+add_action( 'set_object_terms', 'wc_clear_term_product_ids', 10, 6 );
+                                                                                                                                                                                                                                                                                                                                                   <?php
+/**
+ * WooCommerce Product Functions
+ *
+ * Functions for product specific things.
+ *
+ * @author   WooThemes
+ * @category Core
+ * @package  WooCommerce/Functions
+ * @version  2.3.0
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
+
+/**
+ * Main function for returning products, uses the WC_Product_Factory class.
+ *
+ * @param mixed $the_product Post object or post ID of the product.
+ * @param array $args (default: array()) Contains all arguments to be used to get this product.
+ * @return WC_Product
+ */
+function wc_get_product( $the_product = false, $args = array() ) {
+	if ( ! did_action( 'woocommerce_init' ) ) {
+		_doing_it_wrong( __FUNCTION__, __( 'wc_get_product should not be called before the woocommerce_init action.', 'woocommerce' ), '2.5' );
+		return false;
+	}
+	return WC()->product_factory->get_product( $the_product, $args );
+}
+
+/**
+ * Update a product's stock amount.
+ *
+ * @param  int $product_id
+ * @param  int $new_stock_level
+ */
+function wc_update_product_stock( $product_id, $new_stock_level ) {
+	$product = wc_get_product( $product_id );
+
+	if ( ! metadata_exists( 'post', $product_id, '_stock' ) || $product->get_stock_quantity() !== $new_stock_level ) {
+		$product->set_stock( $new_stock_level );
+	}
+}
+
+/**
+ * Update a product's stock status.
+ *
+ * @param  int $product_id
+ * @param  int $status
+ */
+function wc_update_product_stock_status( $product_id, $status ) {
+	$product = wc_get_product( $product_id );
+	$product->set_stock_status( $status );
+}
+
+/**
+ * Returns whether or not SKUS are enabled.
+ * @return bool
+ */
+function wc_product_sku_enabled() {
+	return apply_filters( 'wc_product_sku_enabled', true );
+}
+
+/**
+ * Returns whether or not product weights are enabled.
+ * @return bool
+ */
+function wc_product_weight_enabled() {
+	return apply_filters( 'wc_product_weight_enabled', true );
+}
+
+/**
+ * Returns whether or not product dimensions (HxWxD) are enabled.
+ * @return bool
+ */
+function wc_product_dimensions_enabled() {
+	return apply_filters( 'wc_product_dimensions_enabled', true );
+}
+
+/**
+ * Clear all transients cache for product data.
+ *
+ * @param int $post_id (default: 0)
+ */
+function wc_delete_product_transients( $post_id = 0 ) {
+	// Core transients
+	$transients_to_clear = array(
+		'wc_products_onsale',
+		'wc_featured_products',
+		'wc_outofstock_count',
+		'wc_low_stock_count'
+	);
+
+	// Transient names that include an ID
+	$post_transient_names = array(
+		'wc_product_children_',
+		'wc_product_total_stock_',
+		'wc_var_prices_',
+		'wc_related_'
+	);
+
+	if ( $post_id > 0 ) {
+		foreach( $post_transient_names as $transient ) {
+			$transients_to_clear[] = $transient . $post_id;
+		}
+	}
+
+	// Delete transients
+	foreach( $transients_to_clear as $transient ) {
+		delete_transient( $transient );
+	}
+
+	// Increments the transient version to invalidate cache
+	WC_Cache_Helper::get_transient_version( 'product', true );
+
+	do_action( 'woocommerce_delete_product_transients', $post_id );
+}
+
+/**
+ * Function that returns an array containing the IDs of the products that are on sale.
+ *
+ * @since 2.0
+ * @access public
+ * @return array
+ */
+function wc_get_product_ids_on_sale() {
+	global $wpdb;
+
+	// Load from cache
+	$product_ids_on_sale = get_transient( 'wc_products_onsale' );
+
+	// Valid cache found
+	if ( false !== $product_ids_on_sale ) {
+		return $product_ids_on_sale;
+	}
+
+	$on_sale_posts = $wpdb->get_results( "
+		SELECT post.ID, post.post_parent FROM `$wpdb->posts` AS post
+		LEFT JOIN `$wpdb->postmeta` AS meta ON post.ID = meta.post_id
+		LEFT JOIN `$wpdb->postmeta` AS meta2 ON post.ID = meta2.post_id
+		WHERE post.post_type IN ( 'product', 'product_variation' )
+			AND post.post_status = 'publish'
+			AND meta.meta_key = '_sale_price'
+			AND meta2.meta_key = '_price'
+			AND CAST( meta.meta_value AS DECIMAL ) >= 0
+			AND CAST( meta.meta_value AS CHAR ) != ''
+			AND CAST( meta.meta_value AS DECIMAL ) = CAST( meta2.meta_value AS DECIMAL )
+		GROUP BY post.ID;
+	" );
+
+	$product_ids_on_sale = array_unique( array_map( 'absint', array_merge( wp_list_pluck( $on_sale_posts, 'ID' ), array_diff( wp_list_pluck( $on_sale_posts, 'post_parent' ), array( 0 ) ) ) ) );
+
+	set_transient( 'wc_products_onsale', $product_ids_on_sale, DAY_IN_SECONDS * 30 );
+
+	return $product_ids_on_sale;
+}
+
+/**
+ * Function that returns an array containing the IDs of the featured products.
+ *
+ * @since 2.1
+ * @access public
+ * @return array
+ */
+function wc_get_featured_product_ids() {
+
+	// Load from cache
+	$featured_product_ids = get_transient( 'wc_featured_products' );
+
+	// Valid cache found
+	if ( false !== $featured_product_ids )
+		return $featured_product_ids;
+
+	$featured = get_posts( array(
+		'post_type'      => array( 'product', 'product_variation' ),
+		'posts_per_page' => -1,
+		'post_status'    => 'publish',
+		'meta_query'     => array(
+			array(
+				'key' 		=> '_visibility',
+				'value' 	=> array('catalog', 'visible'),
+				'compare' 	=> 'IN'
+			),
+			array(
+				'key' 	=> '_featured',
+				'value' => 'yes'
+			)
+		),
+		'fields' => 'id=>parent'
+	) );
+
+	$product_ids          = array_keys( $featured );
+	$parent_ids           = array_values( array_filter( $featured ) );
+	$featured_product_ids = array_unique( array_merge( $product_ids, $parent_ids ) );
+
+	set_transient( 'wc_featured_products', $featured_product_ids, DAY_IN_SECONDS * 30 );
+
+	return $featured_product_ids;
+}
+
+/**
+ * Filter to allow product_cat in the permalinks for products.
+ *
+ * @access public
+ * @param string $permalink The existing permalink URL.
+ * @param WP_Post $post
+ * @return string
+ */
+function wc_product_post_type_link( $permalink, $post ) {
+	// Abort if post is not a product
+	if ( $post->post_type !== 'product' ) {
+		return $permalink;
+	}
+
+	// Abort early if the placeholder rewrite tag isn't in the generated URL
+	if ( false === strpos( $permalink, '%' ) ) {
+		return $permalink;
+	}
+
+	// Get the custom taxonomy terms in use by this post
+	$terms = get_the_terms( $post->ID, 'product_cat' );
+
+	if ( ! empty( $terms ) ) {
+		usort( $terms, '_usort_terms_by_ID' ); // order by ID
+
+		$category_object = apply_filters( 'wc_product_post_type_link_product_cat', $terms[0], $terms, $post );
+		$category_object = get_term( $category_object, 'product_cat' );
+		$product_cat     = $category_object->slug;
+
+		if ( $parent = $category_object->parent ) {
+			$ancestors = get_ancestors( $category_object->term_id, 'product_cat' );
+			foreach ( $ancestors as $ancestor ) {
+				$ancestor_object = get_term( $ancestor, 'product_cat' );
+				$product_cat     = $ancestor_object->slug . '/' . $product_cat;
+			}
+		}
+	} else {
+		// If no terms are assigned to this post, use a string instead (can't leave the placeholder there)
+		$product_cat = _x( 'uncategorized', 'slug', 'woocommerce' );
+	}
+
+	$find = array(
+		'%year%',
+		'%monthnum%',
+		'%day%',
+		'%hour%',
+		'%minute%',
+		'%second%',
+		'%post_id%',
+		'%category%',
+		'%product_cat%'
+	);
+
+	$replace = array(
+		date_i18n( 'Y', strtotime( $post->post_date ) ),
+		date_i18n( 'm', strtotime( $post->post_date ) ),
+		date_i18n( 'd', strtotime( $post->post_date ) ),
+		date_i18n( 'H', strtotime( $post->post_date ) ),
+		date_i18n( 'i', strtotime( $post->post_date ) ),
+		date_i18n( 's', strtotime( $post->post_date ) ),
+		$post->ID,
+		$produ

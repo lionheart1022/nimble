@@ -1,0 +1,432 @@
+			allow_conditional_comments: false,
+			special: 'script,noscript',
+
+			comment: function(text) {
+				writer.comment(text);
+			},
+
+			cdata: function(text) {
+				writer.cdata(text);
+			},
+
+			text: function(text, raw) {
+				writer.text(text, raw);
+			},
+
+			start: function(name, attrs, empty) {
+				blocked = true;
+
+				if (name == 'script' || name == 'noscript') {
+					return;
+				}
+
+				for (var i = 0; i < attrs.length; i++) {
+					if (attrs[i].name.indexOf('on') === 0) {
+						return;
+					}
+
+					if (attrs[i].name == 'style') {
+						attrs[i].value = editor.dom.serializeStyle(editor.dom.parseStyle(attrs[i].value), name);
+					}
+				}
+
+				writer.start(name, attrs, empty);
+				blocked = false;
+			},
+
+			end: function(name) {
+				if (blocked) {
+					return;
+				}
+
+				writer.end(name);
+			}
+		}, new tinymce.html.Schema({})).parse(html);
+
+		return writer.getContent();
+	}
+
+	function updateHtml(html, data, updateAll) {
+		var writer = new tinymce.html.Writer();
+		var sourceCount = 0, hasImage;
+
+		function setAttributes(attrs, updatedAttrs) {
+			var name, i, value, attr;
+
+			for (name in updatedAttrs) {
+				value = "" + updatedAttrs[name];
+
+				if (attrs.map[name]) {
+					i = attrs.length;
+					while (i--) {
+						attr = attrs[i];
+
+						if (attr.name == name) {
+							if (value) {
+								attrs.map[name] = value;
+								attr.value = value;
+							} else {
+								delete attrs.map[name];
+								attrs.splice(i, 1);
+							}
+						}
+					}
+				} else if (value) {
+					attrs.push({
+						name: name,
+						value: value
+					});
+
+					attrs.map[name] = value;
+				}
+			}
+		}
+
+		new tinymce.html.SaxParser({
+			validate: false,
+			allow_conditional_comments: true,
+			special: 'script,noscript',
+
+			comment: function(text) {
+				writer.comment(text);
+			},
+
+			cdata: function(text) {
+				writer.cdata(text);
+			},
+
+			text: function(text, raw) {
+				writer.text(text, raw);
+			},
+
+			start: function(name, attrs, empty) {
+				switch (name) {
+					case "video":
+					case "object":
+					case "embed":
+					case "img":
+					case "iframe":
+						setAttributes(attrs, {
+							width: data.width,
+							height: data.height
+						});
+						break;
+				}
+
+				if (updateAll) {
+					switch (name) {
+						case "video":
+							setAttributes(attrs, {
+								poster: data.poster,
+								src: ""
+							});
+
+							if (data.source2) {
+								setAttributes(attrs, {
+									src: ""
+								});
+							}
+							break;
+
+						case "iframe":
+							setAttributes(attrs, {
+								src: data.source1
+							});
+							break;
+
+						case "source":
+							sourceCount++;
+
+							if (sourceCount <= 2) {
+								setAttributes(attrs, {
+									src: data["source" + sourceCount],
+									type: data["source" + sourceCount + "mime"]
+								});
+
+								if (!data["source" + sourceCount]) {
+									return;
+								}
+							}
+							break;
+
+						case "img":
+							if (!data.poster) {
+								return;
+							}
+
+							hasImage = true;
+							break;
+					}
+				}
+
+				writer.start(name, attrs, empty);
+			},
+
+			end: function(name) {
+				if (name == "video" && updateAll) {
+					for (var index = 1; index <= 2; index++) {
+						if (data["source" + index]) {
+							var attrs = [];
+							attrs.map = {};
+
+							if (sourceCount < index) {
+								setAttributes(attrs, {
+									src: data["source" + index],
+									type: data["source" + index + "mime"]
+								});
+
+								writer.start("source", attrs, true);
+							}
+						}
+					}
+				}
+
+				if (data.poster && name == "object" && updateAll && !hasImage) {
+					var imgAttrs = [];
+					imgAttrs.map = {};
+
+					setAttributes(imgAttrs, {
+						src: data.poster,
+						width: data.width,
+						height: data.height
+					});
+
+					writer.start("img", imgAttrs, true);
+				}
+
+				writer.end(name);
+			}
+		}, new tinymce.html.Schema({})).parse(html);
+
+		return writer.getContent();
+	}
+
+	editor.on('ResolveName', function(e) {
+		var name;
+
+		if (e.target.nodeType == 1 && (name = e.target.getAttribute("data-mce-object"))) {
+			e.name = name;
+		}
+	});
+
+	editor.on('preInit', function() {
+		// Make sure that any messy HTML is retained inside these
+		var specialElements = editor.schema.getSpecialElements();
+		tinymce.each('video audio iframe object'.split(' '), function(name) {
+			specialElements[name] = new RegExp('<\/' + name + '[^>]*>', 'gi');
+		});
+
+		// Allow elements
+		//editor.schema.addValidElements('object[id|style|width|height|classid|codebase|*],embed[id|style|width|height|type|src|*],video[*],audio[*]');
+
+		// Set allowFullscreen attribs as boolean
+		var boolAttrs = editor.schema.getBoolAttrs();
+		tinymce.each('webkitallowfullscreen mozallowfullscreen allowfullscreen'.split(' '), function(name) {
+			boolAttrs[name] = {};
+		});
+
+		// Converts iframe, video etc into placeholder images
+		editor.parser.addNodeFilter('iframe,video,audio,object,embed,script', function(nodes, name) {
+			var i = nodes.length, ai, node, placeHolder, attrName, attrValue, attribs, innerHtml;
+			var videoScript;
+
+			while (i--) {
+				node = nodes[i];
+				if (!node.parent) {
+					continue;
+				}
+
+				if (node.name == 'script') {
+					videoScript = getVideoScriptMatch(node.attr('src'));
+					if (!videoScript) {
+						continue;
+					}
+				}
+
+				placeHolder = new tinymce.html.Node('img', 1);
+				placeHolder.shortEnded = true;
+
+				if (videoScript) {
+					if (videoScript.width) {
+						node.attr('width', videoScript.width.toString());
+					}
+
+					if (videoScript.height) {
+						node.attr('height', videoScript.height.toString());
+					}
+				}
+
+				// Prefix all attributes except width, height and style since we
+				// will add these to the placeholder
+				attribs = node.attributes;
+				ai = attribs.length;
+				while (ai--) {
+					attrName = attribs[ai].name;
+					attrValue = attribs[ai].value;
+
+					if (attrName !== "width" && attrName !== "height" && attrName !== "style") {
+						if (attrName == "data" || attrName == "src") {
+							attrValue = editor.convertURL(attrValue, attrName);
+						}
+
+						placeHolder.attr('data-mce-p-' + attrName, attrValue);
+					}
+				}
+
+				// Place the inner HTML contents inside an escaped attribute
+				// This enables us to copy/paste the fake object
+				innerHtml = node.firstChild && node.firstChild.value;
+				if (innerHtml) {
+					placeHolder.attr("data-mce-html", escape(innerHtml));
+					placeHolder.firstChild = null;
+				}
+
+				placeHolder.attr({
+					width: node.attr('width') || "300",
+					height: node.attr('height') || (name == "audio" ? "30" : "150"),
+					style: node.attr('style'),
+					src: tinymce.Env.transparentSrc,
+					"data-mce-object": name,
+					"class": "mce-object mce-object-" + name
+				});
+
+				node.replace(placeHolder);
+			}
+		});
+
+		// Replaces placeholder images with real elements for video, object, iframe etc
+		editor.serializer.addAttributeFilter('data-mce-object', function(nodes, name) {
+			var i = nodes.length, node, realElm, ai, attribs, innerHtml, innerNode, realElmName;
+
+			while (i--) {
+				node = nodes[i];
+				if (!node.parent) {
+					continue;
+				}
+
+				realElmName = node.attr(name);
+				realElm = new tinymce.html.Node(realElmName, 1);
+
+				// Add width/height to everything but audio
+				if (realElmName != "audio" && realElmName != "script") {
+					realElm.attr({
+						width: node.attr('width'),
+						height: node.attr('height')
+					});
+				}
+
+				realElm.attr({
+					style: node.attr('style')
+				});
+
+				// Unprefix all placeholder attributes
+				attribs = node.attributes;
+				ai = attribs.length;
+				while (ai--) {
+					var attrName = attribs[ai].name;
+
+					if (attrName.indexOf('data-mce-p-') === 0) {
+						realElm.attr(attrName.substr(11), attribs[ai].value);
+					}
+				}
+
+				if (realElmName == "script") {
+					realElm.attr('type', 'text/javascript');
+				}
+
+				// Inject innerhtml
+				innerHtml = node.attr('data-mce-html');
+				if (innerHtml) {
+					innerNode = new tinymce.html.Node('#text', 3);
+					innerNode.raw = true;
+					innerNode.value = sanitize(unescape(innerHtml));
+					realElm.append(innerNode);
+				}
+
+				node.replace(realElm);
+			}
+		});
+	});
+
+	editor.on('ObjectSelected', function(e) {
+		var objectType = e.target.getAttribute('data-mce-object');
+
+		if (objectType == "audio" || objectType == "script") {
+			e.preventDefault();
+		}
+	});
+
+	editor.on('objectResized', function(e) {
+		var target = e.target, html;
+
+		if (target.getAttribute('data-mce-object')) {
+			html = target.getAttribute('data-mce-html');
+			if (html) {
+				html = unescape(html);
+				target.setAttribute('data-mce-html', escape(
+					updateHtml(html, {
+						width: e.width,
+						height: e.height
+					})
+				));
+			}
+		}
+	});
+
+	editor.addButton('media', {
+		tooltip: 'Insert/edit video',
+		onclick: showDialog,
+		stateSelector: ['img[data-mce-object=video]', 'img[data-mce-object=iframe]']
+	});
+
+	editor.addMenuItem('media', {
+		icon: 'media',
+		text: 'Insert/edit video',
+		onclick: showDialog,
+		context: 'insert',
+		prependToContext: true
+	});
+
+	this.showDialog = showDialog;
+});
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         CWS
+úŠ  xÚÜ¼XTÇ×0~gîÝ½»Ë"*6T%«`/±¡‚BÔ5‚Q£ Ë²ë®.,²`KŒØ{l±ÅÞ{ï±%Æëv&K¬‰½ó?gî6Ôäý½ßÿ{¾ç{?ÎÜ)gÎÌœ9sÊÜý9áÇù-ã¸’„kPŠã¸ÁÅŽŽkœ•fjÔ±Ulhÿtk†½”š„›³³3EFöë×¯F¿Ú5lY=#k6lØ02ªVd­ZÕ£º}@F¶¾õ{¥ð¦Œ@+£ÝeÉÌ¶Ø2B±¬Oµåd7	wRM3¸‰fædYÉ4C¤ÑjL7fdÛ#kÖ¨	„ÒL¶¬t}vS}f¦ÕbÐ#¹ÈþÕíf›¡w?}_cu“Uo77Žô bŸlK¶ÕØ4:Í–jµû‡Ö	öôgØ
+"§y&ÚÔk™zì]Ã`KÌÌ²¥å`N& Å:{wA™9©V‹ÝlÌjš“Ñ;ÃÖOÂS‹8†,£>ÛVÃU‡íV}FÏ}OcÓ˜ö¬Í]fsÔg›Æçd„Ö¬¥­U³¶4¬mù·5°M¹VšÛ|c®%…½ýRÅC*Èñ¦û¹IšÁŽW¥Ûú[Œ™Vý c×LÙÏ—ã'«Å=!ý/ÞŸÛm|ñ˜Ã1×¦î¿<³á°ú“ÌÁ³ô))¦™Ñ-ý=Dœ0¦T—¿ôÖ”hùG„¿!û¯X*o‘;:öô¤š+†dvúvX”÷û¢ÐŠ
+sfÌè¡U÷wèÖ£ÏªíËÚçt~z£ÌÍ'ïÿÒìÌÛA=:?=7£ IÝ¤_ï-›‘jqœ^™°P,×?´xÈ§}­uLÇg&ÞÞûúaqë‰õ¦GïÚ·5 ±^ýú›§O6”úÃ§ØìÄÒÑÆ„„„ˆÓçÏ			oœÙÖÚ1]˜öó(Ýˆ;wît\xñâÅÄÛó¾z7âÁîÇ'OßþöÓQnbËb¶ÿÚ·[¯ì»k·‡í1óü’‹Šˆ×Ïú?íÔ¹óòØYmu‘¿Ü Ê™Ø]»vU>}z÷\¤ï„K1÷Ó~ß&íÈŒîÜ~N…‘s›nþàüFÃ½ƒ%zhû—k=±œ1\7ïô´b=GëO,_ÿÐÛw¯Þ;0¦˜õÊî²c×/ÙöOïutLíî}]#üÁlÛÞ€½	ËÛùºÿº5{öì1?ž4åå_]ž]¶Ÿ*ž^n`Óìw[¶n•rÉM¯3{Ôé‰ÍÞÝ¾Qû«g÷hyêÖ‘É•6>zqgõúV—¾wùÝ»ë÷õ]{jÕ„Òõ5<¼²çÞ±È}Ò„`…§ÆÜ½w¯Î¡W–G§™Sþõ³ûÅ.u˜ÚçÓ„]›ÂÊ6ÈüqG’úéÛ÷·_mÿäùØGúÿµ`Ýœ-Ç÷Ù÷òô­?çö»òË±§ÃÊ—N.=Ê¯ìcû9×_k÷úÄò¦ÛzYµ;ùÔËÑ·Vk¶Î¨n¿–6>"¡ÜÀAeË–•íÜ·èú›¿~ÿù‡ñ&é¦‡%ìÝ´·ßÕAÛ<ßuçá¸¬¥Ïéšœ‹[ö¸ñïK ¸.}ÞÊ¿Ù›¨n»úV/]?£{Ó;…%ÞÚôÇ¦WpjñÖ­žÔžÓtÐ÷íæ5nøË…]?ÿ|ãµ•Ëç¥ö<9'îë=ÓÒž÷Í+Ë³{›Oµ¼ÛÞðiý°3'›=zôÇæ=Å„ùqkÊ4}óWËœKbÆoì1øí´µ=ö%üîå-ë¥mé}.ÞîBÑæ“é5’"ìmjùoðØÈ2ŸàÑ&·.§oVø¦öìº½ƒg×2Ž]9¸qâ§M}¶ñÎ›ë›5¶\9èÕŸË³®n(þÉ`Îw›øgÁòÖËuÕæ_Š}ÒZÛuÓðW7®`zMošxñféû÷ïÛ¾y¼dAÓ5aÛ}/mîé¿øÙ‹'û>¼RÝ:ÿëGc?¿µ¨óúdÛ•Á…o¿Taá£¯wnIÿ¹ïý‹7Ê~v÷ìZÃ›ËAŸ~ B6µAxéÏ¼­Òä°ívËÑs
+¶X
+N§·<çûyþÎv…­û?Ék}áÚÁqîˆTJÖÂ«Ï[î÷çÀ…ÖÒ“K'Â‰ÙýÍ8ú®|Œ¿Þ,?ðv…‡'799öÑ»±ïz6/,qÿÞ=í«¯–<ç#©•5ÏggYoüÚïê‰ˆˆˆóÕ·_ÞŸ±÷¥)üsmõ–×™­•Ïåv¨UþŽéS¦nlÿäxÿN¦…7\ié„é+ý’gØwÙo¬\yúáÑÃüà()ä¼m{7ýh»ö3¦Mû<©}úÉYµG­íº9v´.|Š¸vßü7&5­[ãÓr?_¼r|VíwÎ¬¾ðèÆ±æï/¥ÞZ˜qnEÇg“·®×ŸYÕi‘­Uñ©Ïz¾w¸øÊÝ»/ÒieÓ©KNmjvÞ0±É¡àÝ«>ó2°²%IÜÆG6Rè×°ÊzM[M(Hß]£÷WþM_„~ucZçópvîM»üzGHTJî‹µyç:­›ýÆwqþwëçì{ûìÒ…‡ðs/.izìÙ³¾y‘G—kxÊÒ¸‚­ÇøÎKûX—=>h{ ì8Ö±ìî·ún~xÿÇâe$æþêöæž§nÞ^<±éØîåß¦?ÙïÔxbùo^,œ:~–>rÏ“À×p‡×K¿xïBýô‹ß=o<åëdË¡ñ³’“žì<5"ëÈáÇ9ÛßÞ1¶Sù§Wîüã÷—®6¾½óÓŽM³â^@¾^¿{çog»º7iËg§>ÛýìbïÉw»o³v]øøH×Q¾¥ëhyáÐ„Ù§{¾\×¹\Ã»1†ß'–ýô‹Óç‚ŽütJ‹£;R
+Jêo5:5¿ÙüÅÏ¯nöp§ãñÄ'sJLX>õTHÈ¡›Ï-Ÿøy»³¶þ¸ÍrYÛdvëë»ãFn\}2§Úõè˜™¿ïZÎpqÇé#O;”]u»,)ÿõ_ÑÑY¿=ïö
+êrò=i&L)³/~çñ9?Yßp÷ó+_]+Õâ›¹çJDLëÝ~øW3J]yòäÏ‚=}Öéš¾´]ÞŠ†[2£œ¬×vÛžüîÚ¸È6uÚmK=ö{™_K'4ûyég3†¿¨salµŸUËfTê±ñèÃ“Ï‹.Ç6ý#`îÙ>×•½1¸0ia¿ªç,˜r³hÏó-×Çž}J÷ü<ú]Æ²~c’÷ìôÝ×óî}³ó@“SktÙð›z‚îFz‡µ>­×(bË¯1~UvÌ}Wø ¿Q…ÏyÇë×?üðÃŠ%/ìm³mŸ2c_jÿž‰Ý|³ Lâ‹Æ*=·8^Æž¢Ütë÷9Å^[ôvA‹Ç5Å-3>Ð°Ù¢)Wºó°SàÎ°—_ú
+ŒôËEÏ'Ô¿²cñâÅ×+î)1âJŸ£1i¸ÌÔ['ç^›ûÇ¾7|^ƒŽr¤³z§£^‰†/~ô©êÉÞ³¡wz÷êÕw]òžWºo|+åÕ¹°¤G™Ï¶Üû[Ó±;¯p×¯÷‘çåþ¶lð|FvSGŸ?Ä—ê‡jÔÙâàÕg/žÌ?ú¶ï—Úë3múãÆÕ÷í²ìô£™Mºœ>{¶ïÀSóš$]Ø×{å’—1^Ì‹oúpÏº|ûÍÞ>)¶«ÿß‹n÷\0åÔÔ=áoÊíº'N6Ð·Óï}=ò¶ÅáoÏûGg6;XùÂƒ7í7G7}°ç«ç6»¹‹xÙüpÍå«Ó2ç/:2äP£î;³FÄ?1¡GÊÕuK'öK4èí«s=Ï}åø¡Ñ§ŸîÚôÖ|HÙõD~£y‡_nùìlöGNá˜¸©UÞŽºÒéåÛçWÇí=qlF¤O^í“ŽÉíS÷pbÕ[bzïÉüž„sþ—Ü÷vÊ“—7žý¶ôÆòÖ¿JŽ½¿òœ¿aþ¾13Å#ÏŸÎ9Ù³Oó¿ÕLjòâí4Ë/‹ÃËwÖß^yk@—)/~½_íÀ¿g[Þ>Ý+ Îßð÷Úµ-—o6¤¹ì©*~©›Üvâó7ëú¬«×»Iðü½onßœÞ»×/«.T<·cÇÓ-´«lQÔíQ°¢0î…ùâãOí¼XæÎß=f\¾Ñºî„k½ROì^2 ¢SÜ¾ÞÝKvëÐ¤FÓº¦DÃÔIs¾¸¿êjÝcO¬o2[7Ár­ Ý„	kV.üüüÊ{õª¿]×çs«|ß8Ý„ÏÏ4Ø´ðõî
+‡êž<œ8j,%kæ»pf@³‡®<|pù¡ñÇã'–]ù2éúþóÖ§uÔøäë§•Î+òÿzÕ»`wâò¥líM çÊS½†/xâaH‰C¦Õ=‡_ß´DŸóóð;£|K„Ô8˜ž¿¯÷œÕ'¾˜xbyäÃ­Óž®~ü³:kŒ}ã…;_>¹qwäÙ¤„ûêi»©þþsá…M³­}*X£Ÿîxñdf£œ+&þ¸#ª^·&5ö®éÕ»×ˆ‘½V=\½Æø_œêpØW·e¯Ž+<÷Xõy°æëú´L={ýZ‚áAÙ¯Ö}›¾ÁñÛš#UŽel:°óâšû]¿~õ(yM`ù0äíy(ôóÝ½úv#)«O&ú<]ÿàá´;[žì:³ñåÖžÿ¬yfVÛ“¯úv®’Ö=höêfÅR¶WŸ¡(qðæçÏ«jµÈúrëêoÎí¨Zoß3kÓº±7K]n¨¡ÄóS[æŽKê4­Ó¼'N®xy»ï`ÏÁ›çæ˜qúÙ½ÉS®†ÄGÔ05ù)=ñ¦6ro©‚õù«»­oý
+™Mï*ÿ2®Z5þØÝ«ƒŽ|ñéçCúøm[0°û×‡lÉyÏn2.=õ|ôœk-Î½Óçï?kZŽüüzä”èC{t½¶ÿbDÙ·ëŽ]Ü[üÛÃÃ+ï›P%ëèô;[ÞùÖíËùåáµ»Á•¦=ýjJ½·ç7ÑçoãÒ›+%šaMQÛ~„‘z©õžøIø¾5í^Iûòöó
+û>©z®ëÖcÆ¥>î}êfBêi[ØªÑW;ªÇú|ÖÀR~×ûpû¹Ý¯5À^Ô>èè×þØ±uÓR¿¼ØâÐˆM²­·~K0$¾¼°˜1æ\õs›¬ß,}·q•µÏÉz£~=h‹uå©gÕÎ$Þ,Ö{œaó™„;;´-–•“~YçžÇî™S:ž6]þzØµøJ§;ÿãA;ã_Mý0m\¾®råß¯-:ßýít£±}¯o’çU€Ò›‹›_>™Yg¥mþÞ_ÃÒõN2K^¥-=ô¼“uP×ö3N®¬ù$É8hñ—Ó¶°C5{m¹ó×—¸4ºÿ"§þ?ÿ“ûæï?7³µ.,®à8Êê7ƒX9´¯1Ëa]“Š5kDU5fli–ŒžM*vJŒ­Þ b³¦¾ªÆ,zƒŒ²±={€ÕjIkR15';Û–Q1´Ÿ%-ÛÜ¤b-èk6Zzš³!_·bh¶-³IE¨‹|¯Æ€=ìÙYVMÕz÷Ì²åd¤aÿPìöº>ÇnüþÇÑûÚ¬9éÆ9™ÿ0DÝ¨ì“AóÇúX'SŽÕ
+±Ñø}jF}¤SÞ üK·ZÿÐ/ÛØ?»b¨É–¼ýÂ˜•¦ÏÐWµ[aÏjV5Ø¬¶¬&+Å² i³b§¬£sj¶Ñj4dëS­ÐÇs0:GÁÒmiÞó«Øk•qV™¡zC6Œže³ÚÝ3­\tË‹r Ö‘eÌ4ê³]S±MÙL$Rm 9é¬N†’d)”­Ø#Y®¡Qd\ÝkF9û(Ãäœ¼e*ÒÕl¹þWÜðE0[²³öìÁi)Íõ?[Š²×:BûZì¯ùÈº¼…ÿãû(F‘•}ãý¥}©èÚ¤ªÌ,[Ï,£ÝžªÏò,ËSç–êµêz©ƒ†EE£RûqÊfGêºYð1úïq	{äÇú¤æ˜LÆ¬÷z´d?^ëóš¹÷"ÿ}%m‘“	Ò-­®nÝìÜzè£»÷ÏXÞ;øÏXïíâ?!~l'ÿ“Eâ$œ»TÓ³Ü:ÿà~D¥þ>Š÷|ïãLøêŸ%ï^~íéŸÁGWû/hÞ‹ý´÷Öú˜[*÷Ê²-éF£UŸi7¦UtQ“¬ŒtëD¹Ïr=Èê­–žÐ‹ñÀ3È±ï{äœl«‰öÁEÐe·ašÌÆ8íX¼LKF†ÑsŒ­6=º"ØÖÚ.å‘nIK³ºuªÁ˜‘mô(¡:<*¨è {¦Ñý=Ö<ßFÐkÓÿ3CX§Ž—®«ÛðƒÙ6üKèš®ËÖD:Y°â»—œý7l£‹ cMýÿ7ì¤kMï©œYãÿT›Y«AÝÿÐd¢œáÎÿ³)YiîÜÀÿ³öÃã+8—\ë¿^óÿT—c—­dk¬ë±™ó>}tÅÿŠè½èE|oÝÿ‚û±¥Û­–4/»$qMªt9Hõ\›\ëãn¬Ô‡x×!oà>ûh“>zÞ]æ f”÷Zô`õÞ£l5ö5ZÝ¥HŒÙ0´Am¯ÅJ«ø_vju¤p³îÿ’P¿¨‹à&õ1çãÿÏ3x3²/h‡ßhsœ)KŸn¬Éi¸œŒ[Ckuàè÷³ðgg³<úÚ,ijöIAØ¯Œl»,ªôþ–ÒÛqß–Nÿ‚5È²³`rI^åºÔ^Åûµ7f'€ÌæH8þ±à±$0Qfe_‰~šÅŽU-,ÙéúÌVúl½ØÂf³õ‚>'ÛæÛJj—HÊ€^Ocp‘:œˆÞ\•·ÏIO5f©$º=¶teG¼LÈèi5Ê¢³²ô”‰Yú;~ !ë`³ÀzÚÿYq&[1©—Þ` “aIµX-ÙJD{—:dÙ2YÙ£]›“Á6B$riö|—vmUíl`p=ì’øç“ÀäWbV;=p«¿BzÔn%&HRáƒèNv¨c™`$dfY²êKz¦ÕØ‚wçòP$•‰ÄZŒÖ4ŸNc×BŸ%—†’%˜õ™F1½ƒ-Ëè×‘¹vÆ¬–VÌÁÇëC¹4Š*¡·%CÊÊZÂv+`Er;«äû§[å™z;ŸaÌVJó€œ/ì3lB†‘ñDnÏÎ2êÓ•ló1'Ï´Ùa\Y_˜•ÍGê&Ö¢—}5
+—£ªpI”/ÃŒËèÀf§°Ø; “¦´ØàLdÓä’*Q¤åd±Y4Òq3cõ«1Í¦ê)©,–lÏFßÌ,#ž¹lJ<†})®‘ôiil‹ÚZ ¶Ä®2Ã\$l•Ýlë'e•XËf¯²ôV)+ a5¶¸È©±‡«àŸz=Ë6ÀUVÅá9Ñv»1Û¯Å€l#PVtò('Ûbµ+ÝMÁÎlT¹˜×Föpn˜
+)Kèêå©RdÛ¤ÓZ"®­~€-'»•%KÚºé££ò®>ÿÐîo-Z]Ê’Ñ¸‹_á¼×!­±Èiõsô,}?¼æÓÄ1†#Ž>Û`6f…¸Gÿ ¯e³eËì¨„Ð_(ÐWH×Û{‹NÏ›ô'älSºH®òt<]¤GWE–-›	LoÍ4ëeL•Ê%-êkÐÃ¢íÒ5¶L}Ÿc·f†½†³¢NM+È]	#f¤µ-«Ìv©I$¶Î²¤ùö´ÚRõÖD[[ÔùZ1M´µf•ÊžÆìHÖ.B‰ª¬nmä~@"È‹´nµ³ÄtV	ýÇ•’_ºQoÏÉ2¦µ‘Öâ*vÆ
+éàªø‚¸D²sôÖ8
+>Ò*Bä’-¯:i—cAi ;Ó~Eë‚âfÛ"•d ØCb§ÒÅê.î\WwîKiw¾ÔôxOšxkv–Î!,„ùY!x|£Óúê3Æ´¢c•pÉ[¯K:5øýC!©µ’óÕ¨ˆù€†Þ§5š&	³„—*näU/—´¹æ}=áŸeDG[­¬Ú^Ò»¿·*—›`‹ã2D|èrñÌH°Ã„™2î Ï²³4â*D’€‹è¤¼Ÿ¤	;eJETlÞ¦T¡–*$‹ ñ\8Ñ=Î°“4z>1’¥À|[p;|2=¶EíTÖôFkqv¢tà·ôªUôp:5Ê.ý¬èátÍDÖª—Ÿô³TŒ¹,+:‘äŽè$#ƒ¡Ù¶ŒD[O0äh˜=PÛ˜&îWü™¦öâ+»‘A¶i— Â_0‰NåÌÃ~È:1Å¹F,§€ÃÁt±¢=è¬
+pÕ4rÕ”q+­œQ’ð.ÎgWçóKéÉ¨Ê­>ºx²]=Ù/J·£ëH½Wîú^ùKµTN`šÐ»ÐÕ»àB“ŽŸw¡v+Áb¯ÝJ%ÕÅAVžnÉÊ²e)ÐÀƒªîâÊtõ3ØÒ3s²iROMÑbíVÞ§A’E"¹ ÈS™”÷€Ãœc”±Ô”|V6Øˆž=AÔv°û®‚ošÓT0BÁ«‘—‹åÿžQ)îuÎ<'KÄ“Õ%ÝªH×÷g» „Œ¤>EÉC·ó ›…4°U~ Jm[àƒuN{¨Á|;c¶Ù–Ó‚ÝÇéæ£S²  s*)^Ã¬½7Ìø{]R0)Ìa8=%ïÙ¨dˆCìþ’{Ê[*Ë
+˜5 ´‚”¯GÕÞ³öZ¶—‡¨p*—nRdìü óXu	·hõ ý-°I “ã2Ò,`‘T{+›!‡9YNLg“ÒU¶—ô¸b.jÌ•±zoÄ=¹íÈPe	x„t®™Ø’¡ðV[Ïˆ~²\+*ªû\92½¤q3ôVñ‹˜Ž	qºö>ujÔ¬U£f½¨úõ4èl|!½af¦Î_^<Ü¬¬ŽNHˆILèÑ1&ºUW=žr;x·iTÚFwíÑ²m\ËÏ”¸ ƒÕbèíÓ!ºSBŒT«búšUûuè¨kÝ1&!AjñuíkôýB×¶S;èÔ&º}ë§æ6Àéiô“š:upös]Ø°~©±•®s{©Ùßs‰%!ÄvjÛ6¡eÇ˜‚ÇHíuÛAð† ÈÄóÒ)Ë*eÀ}€9é¢ö ýhöý¶±S†ü%T‰ÅÓ¼Ý¶D—¿	rÚ)£ø“Å˜ÆØŠØ²„ÄèŽ‰’è³s/Kh×*FÍ* ˆÉÉ–;¹Âê$¦¤		‰ºjg7@ÕÃµË~Îðµ¿Tˆqfâ°Ý¤7}À–Ù!Ð¬Ò#€2´ªXpcD9ås²¬¤Y§Lyä):¡¶$S©9à Z2DKFš±¿Î$·ç¤‚6ô3ëíº~N§l@P‘·‘ä„­üx([¾(›3VŒbé!RÆ;noôž"T± :¯*À½mcbeìæ"OX+£IŸceó Æµ3fäø±ÌX ›«h¯ë‘Ð2ºmŒÒîª’ƒÜ3Û¬ÆÓÐ)1Ã;H‹U’‚AEâ¯ÏÎ÷ÚÂNƒ@(ZêÚuh“#Ç-0‹IžTïJò²h6ÆÏRÔà,zbxU§Žm;AíÙr8Vpdìì	p–Í2“Õf=b4ööK@ÝáöýìEŠlÅN–2ìƒ¨‡t@Ôi^r<8Ñm}Úéð´·‰þ"F%åÛé Ë"fX|XV2-~Ñ­ZÅ´ê‘ŒLŒn£ _²¥ÙbM,°Á -æfRôZj`Ø«2¹oOTžã«p†Š»uPWú¤â0®¤©X>4¦UeË ¥Ç¹ipUû˜DœCb§9(¥¸/c|bÚ'ÆtìÛ1º]Œ/l›WŠ¸´-¬Â7:«'Óó1èPcÌ¦L
+‘\‹‰ÎV±(^rn@Y¢€áÃj%Fðé–yð|ËibT¥ºo…|3-ýÖ„Ðè\ÚÓ!4£s ±À> d%=ÀëÏ[ZÙÒá,ùr²0H”JA.cÖÈKßûÂ©Ág¦	JhMÝ¥ ôe€œm9;¼w®¥ ÉÇiUzÔé%c[ìëöÞ0Þ’§3ƒÂëSíî »ÑÇÃš ·ÙÈc…é.·,{@¦Q§/…Ì»¤ÚjP	ª˜Íf§G–×.¦£K{¸N™Œ)XR]Àó-“¬œé9=<Ô¾ MµÌÉ²ƒË×3KŸi¶ Þ5‚k±Zèô°P<¬ðÉÈIg[ÜvûhÒ}‹{»(;êàÁ¹è¨r1"õ’1/gHí}w­pÙ;•Ç²©<&ÊÇëòWÕ(*JáºÁ•Wgåâ®ù¸œ –hÕ‚\µRÐ’YE£¢H#,¶¼Rb&b—Kñ‚˜©OûÒ˜e“ƒÂÈ2!‚5ƒ¨Ôç€ëª}€˜Æ‘€!ì›`¶Ù³…L[V¶"¦ˆõài¦±x×–5@0Y¬F(­¬
+ø¸x°ä=cúgÎ ÉU›5ªÚ-¹Q÷Èf•’>©Ö¨Z3¨èÙ=²j5lßjNŒæIÕ5såª5k^­™»c"5ªÚ=àWêä"Ñ-¹Y¥î‘IÝ#«b5gÁ±
++àÈ•ªÖ`$c£A‘“a#i¤Ý?!=I¨˜…·ÁHªÈà\X²I!¹»=B +‡êó?mÔH¶ÂÇ4ct6éA-i¤Mê&ô²Y2H©á›`„ãœeêÀ·ˆWÁ4¼5›ØÐ£—)Œ«Sý¢3¤²:`hìULºŠRØÑÅùìªtÇ
+Wœ¡láºÖ‘sÓQìÒ®-#…ëÏò|²mmmýÀÖÛ2ö’€·¥ö’P–©Ñêƒô€ª»—e“e”K1…€óöÓYÐ€¬ W#»ÂWyÞÐœL1'“ß6)1‘Šx
+”˜°¢è|säº+b•*vAÌþPÀÏòDçWy2ö)ž€Ÿæ	øž¿¹º*Ï·xi’_àAóÎÈ¶ ®ÞžˆÚ(ºÕÑí[‚ÊÓ{W¸ï§£s²m¨…öºö`ñœ%•›5v_é*Ïys¤v–Øåœ’Kiréu©D£úÓäJ.XÀo<ì2öêEì•cÏ¶˜dK·nÆNà²âawåÒWré…•\
+LdÌJÉ%«D+‡Ñäê*èƒñXm™ÁjÔg©¶ÌÐÙý™”´>j>_¦
+q·PxÝÞ6bÚXº„Ão¤âäRøÒ9˜óÁ²`upPpHpÅàðàˆàÈ’5e\p£àæÁ]Kv+Ù½d²B¯èYr<‘q%g“’sHÉù¤äbRrT!%’àc¤ä	¢8IJÞ@¤¤ä_øIKŽ¥Šq´äd*ã3!	ÞG‡àY‚„Ô9JCŽÑã4ä9IC”Á¯h‰Èàé¼ŒOB’CæBPÃCæÌ„,†G	YÈ2V*q„„ÅŠc$ä<Cþ’Æ9!¨ˆ@¨¯šDFÕô©U»NÝzõâL«EoÒ´”ýš—Š$ÑŠ-Í
+ÿV-bˆ"2$ÖY£)CZóm"KÇ¹*¯Œ'‘Ÿ•m[®]eõHÒ¾¼.´CRžˆª*$òs¾MåŽõø$T%‘‰Š¾¨ß`› *RAäå"E¢©J¤>¢à+?QÐˆB€(Š¤˜(+.’`QVB”•…R¢¼´HÊˆ¤¬HÊ‰Byt­ Š•DY˜(«,òUDEUQ¨&*?y­¨¨.
+5DU”HjŠB-Q][$uDu]Q]OT×ÕDuCÑ÷SQÝXôm"ª›Šêf¢_´¨n!ò-Eu+Q#ªcEukQÝFTÇ‰êxQý™¨n+ªÛ‰êö¢Z'ª;ˆêÏEuG‘$ˆêDQÝIT!ª:‹ª.¢ÿ—ÊÎD$ÝEU’Hzˆª±XªXÌ ªÒ”Fª4ñbY²ˆA½Ä ÞbUJƒ2Ä ›”)õƒ²Ä »”-åˆA}Å ~bP1h€4PúJúZ$}#ƒr‰4`(À0€á # FŒ0`,lÆ8¢L#Ê"O øj&Â$3DPÑdäúŠÁ“áÑO$Sà1à;€l‘dŠ¤H¦A§éP‘* L€21ˆˆ <`À÷Pž0—ˆŠyD,µ ò,X
+°œˆü
+x®$b™zb™úb™U[°`-À:€õ  6lØ°`+À6€í ; vü £íŠmD²{ öìƒ¦ÏÄ2?Âã'€ýPõ3ÀÈ„ç!€ÃD,ûË'b…S €<€|€€Ó g Îœ8pà"À%€Ë ¿\¸
+ðÀï × ®ücÜ¸EÄJ·þ„üx~&Vº{ ÷‰H±J=±J}±Êß{ðà	 ?xðÊ/ ^¼xðà-À;€B€\*V0`Àp€ö`4ýÇP±*lHµñT¬6à[€‰ “ }
+?™
+Ïï ¦Q1b:<gPQ;‹ŠÁ³æ@y.À|€… ‹–,X	°`-Àz€ ©X}<7lØ
+°`À »©¨ÚKÅ?B~?€Y$Ãp {€Š‘‡Ž üBKƒ¶°ˆÂ)hp ääSQ(€çi€3 gÎœ¸ pàÀeªü•
+Ê+ W~•#üõ×¨è{Š5¯Bþ€ 7nÜ¦¢ßŸð¼cÜ…ç=€û  üð7À#€Ç O€ÎJ¢l³|J•Ï`ò‚Š_CÓ€· ï ry‘
+0`8À€‘ £ FŒ0ŽýÇÃsÀ· ®Àt&ñÊ.DÙ]&’^"™•Sx±ÑT€ï ¦ñÊ$"~:ªg|0›/
+v>äÁžÁc à“Þ°u¼r!ÊÙD&F®àK‹Êe¼¨\0(Ä+yeŽRlò°
+ðÓEºk Ö¬ãÅm”U°Ñ¼ò;ªRNýM6ò¢ï&hÝ°`+À6€í ; vü °`7À€½¼ØæÀ/¼ÙCls²'N8 ò òÚ([úˆäw@ºÎ—VÃžAî6À^y‡W‹þ ÿ_ÚWŒ|
+D_ð¢î%À+€× @I÷†W'~Ê‰Dì-à¼(ÈÄC †Û7`¤ ¬®PVò/Æh”GÊ¯5Ê•D»$ø=â5Ê±‚FÙK£ì¡QŽƒÜªÛLÄ6 ÓÚôÛôÛ|¥‰‚r´N˜
+p±¦Býx€)‚ß°um¦A~º ÌÐ(ûj”6²ŸF9pgBù†ž0` L×ˆÊ…ìWÊEˆ²HP.ÁçA¹ŸKå2|.”y0Y%(Wby%ô[ýÖ ¬…ü:x®Ø (oòÀxv¢ ñÃçF€Þ0»-0»­‚ùÀ8€}‚òªQÞæ¡m4î´ß!Ê­À‘_ Ë6xþŒÃ”Ç ¼à8Àv¨ß°‚ø(µ>¥@Ü@Ü”»ˆB<ñl³6ä$Lé€CPVñùAúû"Â±¿X$„ãD­v=ñCB(<GÙW3¬‚ÿ qµIí§"
+BÀ/‚‚Q¢ãÂ¡^ô¨«4	þ[?<§”œŠW«ý‰J%­Äù#xHýQø

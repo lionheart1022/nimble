@@ -1,0 +1,503 @@
+t
+			if ( $parent ) {
+				// We can force variable product prices to sync up by removing their min price meta
+				delete_post_meta( $parent, '_min_price_variation_id' );
+
+				// Grouped products need syncing via a function
+				$this_product = wc_get_product( $product_id );
+
+				if ( $this_product->is_type( 'simple' ) ) {
+					$this_product->grouped_product_sync();
+				}
+			}
+		}
+
+		delete_transient( 'wc_products_onsale' );
+	}
+
+	// Sales which are due to end
+	$product_ids = $wpdb->get_col( $wpdb->prepare( "
+		SELECT postmeta.post_id FROM {$wpdb->postmeta} as postmeta
+		LEFT JOIN {$wpdb->postmeta} as postmeta_2 ON postmeta.post_id = postmeta_2.post_id
+		LEFT JOIN {$wpdb->postmeta} as postmeta_3 ON postmeta.post_id = postmeta_3.post_id
+		WHERE postmeta.meta_key = '_sale_price_dates_to'
+		AND postmeta_2.meta_key = '_price'
+		AND postmeta_3.meta_key = '_regular_price'
+		AND postmeta.meta_value > 0
+		AND postmeta.meta_value < %s
+		AND postmeta_2.meta_value != postmeta_3.meta_value
+	", current_time( 'timestamp' ) ) );
+
+	if ( $product_ids ) {
+		foreach ( $product_ids as $product_id ) {
+			$regular_price = get_post_meta( $product_id, '_regular_price', true );
+
+			update_post_meta( $product_id, '_price', $regular_price );
+			update_post_meta( $product_id, '_sale_price', '' );
+			update_post_meta( $product_id, '_sale_price_dates_from', '' );
+			update_post_meta( $product_id, '_sale_price_dates_to', '' );
+
+			$parent = wp_get_post_parent_id( $product_id );
+
+			// Sync parent
+			if ( $parent ) {
+				// Grouped products need syncing via a function
+				$this_product = wc_get_product( $product_id );
+				if ( $this_product->is_type( 'simple' ) ) {
+					$this_product->grouped_product_sync();
+				}
+			}
+		}
+
+		WC_Cache_Helper::get_transient_version( 'product', true );
+		delete_transient( 'wc_products_onsale' );
+	}
+}
+add_action( 'woocommerce_scheduled_sales', 'wc_scheduled_sales' );
+
+/**
+ * Get attachment image attributes.
+ *
+ * @access public
+ * @param array $attr
+ * @return array
+ */
+function wc_get_attachment_image_attributes( $attr ) {
+	if ( strstr( $attr['src'], 'woocommerce_uploads/' ) ) {
+		$attr['src'] = wc_placeholder_img_src();
+	}
+
+	return $attr;
+}
+add_filter( 'wp_get_attachment_image_attributes', 'wc_get_attachment_image_attributes' );
+
+
+/**
+ * Prepare attachment for JavaScript.
+ *
+ * @access public
+ * @param array $response
+ * @return array
+ */
+function wc_prepare_attachment_for_js( $response ) {
+
+	if ( isset( $response['url'] ) && strstr( $response['url'], 'woocommerce_uploads/' ) ) {
+		$response['full']['url'] = wc_placeholder_img_src();
+		if ( isset( $response['sizes'] ) ) {
+			foreach( $response['sizes'] as $size => $value ) {
+				$response['sizes'][ $size ]['url'] = wc_placeholder_img_src();
+			}
+		}
+	}
+
+	return $response;
+}
+add_filter( 'wp_prepare_attachment_for_js', 'wc_prepare_attachment_for_js' );
+
+/**
+ * Track product views.
+ */
+function wc_track_product_view() {
+	if ( ! is_singular( 'product' ) || ! is_active_widget( false, false, 'woocommerce_recently_viewed_products', true ) ) {
+		return;
+	}
+
+	global $post;
+
+	if ( empty( $_COOKIE['woocommerce_recently_viewed'] ) )
+		$viewed_products = array();
+	else
+		$viewed_products = (array) explode( '|', $_COOKIE['woocommerce_recently_viewed'] );
+
+	if ( ! in_array( $post->ID, $viewed_products ) ) {
+		$viewed_products[] = $post->ID;
+	}
+
+	if ( sizeof( $viewed_products ) > 15 ) {
+		array_shift( $viewed_products );
+	}
+
+	// Store for session only
+	wc_setcookie( 'woocommerce_recently_viewed', implode( '|', $viewed_products ) );
+}
+
+add_action( 'template_redirect', 'wc_track_product_view', 20 );
+
+/**
+ * Get product types.
+ *
+ * @since 2.2
+ * @return array
+ */
+function wc_get_product_types() {
+	return (array) apply_filters( 'product_type_selector', array(
+		'simple'   => __( 'Simple product', 'woocommerce' ),
+		'grouped'  => __( 'Grouped product', 'woocommerce' ),
+		'external' => __( 'External/Affiliate product', 'woocommerce' ),
+		'variable' => __( 'Variable product', 'woocommerce' )
+	) );
+}
+
+/**
+ * Check if product sku is unique.
+ *
+ * @since 2.2
+ * @param int $product_id
+ * @param string $sku Will be slashed to work around https://core.trac.wordpress.org/ticket/27421
+ * @return bool
+ */
+function wc_product_has_unique_sku( $product_id, $sku ) {
+	global $wpdb;
+
+	$sku_found = $wpdb->get_var( $wpdb->prepare( "
+		SELECT $wpdb->posts.ID
+		FROM $wpdb->posts
+		LEFT JOIN $wpdb->postmeta ON ( $wpdb->posts.ID = $wpdb->postmeta.post_id )
+		WHERE $wpdb->posts.post_type IN ( 'product', 'product_variation' )
+		AND $wpdb->posts.post_status = 'publish'
+		AND $wpdb->postmeta.meta_key = '_sku' AND $wpdb->postmeta.meta_value = '%s'
+		AND $wpdb->postmeta.post_id <> %d LIMIT 1
+	 ", wp_slash( $sku ), $product_id ) );
+
+	if ( apply_filters( 'wc_product_has_unique_sku', $sku_found, $product_id, $sku ) ) {
+		return false;
+	} else {
+		return true;
+	}
+}
+
+/**
+ * Get product ID by SKU.
+ *
+ * @since  2.3.0
+ * @param  string $sku
+ * @return int
+ */
+function wc_get_product_id_by_sku( $sku ) {
+	global $wpdb;
+
+	$product_id = $wpdb->get_var( $wpdb->prepare( "
+		SELECT posts.ID
+		FROM $wpdb->posts AS posts
+		LEFT JOIN $wpdb->postmeta AS postmeta ON ( posts.ID = postmeta.post_id )
+		WHERE posts.post_type IN ( 'product', 'product_variation' )
+		AND postmeta.meta_key = '_sku' AND postmeta.meta_value = '%s'
+		LIMIT 1
+	 ", $sku ) );
+
+	return ( $product_id ) ? intval( $product_id ) : 0;
+}
+
+/**
+ * Save product price.
+ *
+ * This is a private function (internal use ONLY) used until a data manipulation api is built.
+ *
+ * @since 2.4.0
+ * @todo  look into Data manipulation API
+ *
+ * @param int $product_id
+ * @param float $regular_price
+ * @param float $sale_price
+ * @param string $date_from
+ * @param string $date_to
+ */
+function _wc_save_product_price( $product_id, $regular_price, $sale_price = '', $date_from = '', $date_to = '' ) {
+	$product_id  = absint( $product_id );
+	$regular_price = wc_format_decimal( $regular_price );
+	$sale_price    = $sale_price === '' ? '' : wc_format_decimal( $sale_price );
+	$date_from     = wc_clean( $date_from );
+	$date_to       = wc_clean( $date_to );
+
+	update_post_meta( $product_id, '_regular_price', $regular_price );
+	update_post_meta( $product_id, '_sale_price', $sale_price );
+
+	// Save Dates
+	update_post_meta( $product_id, '_sale_price_dates_from', $date_from ? strtotime( $date_from ) : '' );
+	update_post_meta( $product_id, '_sale_price_dates_to', $date_to ? strtotime( $date_to ) : '' );
+
+	if ( $date_to && ! $date_from ) {
+		update_post_meta( $product_id, '_sale_price_dates_from', strtotime( 'NOW', current_time( 'timestamp' ) ) );
+	}
+
+	// Update price if on sale
+	if ( '' !== $sale_price && '' === $date_to && '' === $date_from ) {
+		update_post_meta( $product_id, '_price', $sale_price );
+	} else {
+		update_post_meta( $product_id, '_price', $regular_price );
+	}
+
+	if ( '' !== $sale_price && $date_from && strtotime( $date_from ) < strtotime( 'NOW', current_time( 'timestamp' ) ) ) {
+		update_post_meta( $product_id, '_price', $sale_price );
+	}
+
+	if ( $date_to && strtotime( $date_to ) < strtotime( 'NOW', current_time( 'timestamp' ) ) ) {
+		update_post_meta( $product_id, '_price', $regular_price );
+		update_post_meta( $product_id, '_sale_price_dates_from', '' );
+		update_post_meta( $product_id, '_sale_price_dates_to', '' );
+	}
+}
+
+/**
+ * Get attibutes/data for an individual variation from the database and maintain it's integrity.
+ * @since  2.4.0
+ * @param  int $variation_id
+ * @return array
+ */
+function wc_get_product_variation_attributes( $variation_id ) {
+	// Build variation data from meta
+	$all_meta                = get_post_meta( $variation_id );
+	$parent_id               = wp_get_post_parent_id( $variation_id );
+	$parent_attributes       = array_filter( (array) get_post_meta( $parent_id, '_product_attributes', true ) );
+	$found_parent_attributes = array();
+	$variation_attributes    = array();
+
+	// Compare to parent variable product attributes and ensure they match
+	foreach ( $parent_attributes as $attribute_name => $options ) {
+		$attribute                 = 'attribute_' . sanitize_title( $attribute_name );
+		$found_parent_attributes[] = $attribute;
+		if ( ! empty( $options['is_variation'] ) && ! array_key_exists( $attribute, $variation_attributes ) ) {
+			$variation_attributes[ $attribute ] = ''; // Add it - 'any' will be asumed
+		}
+	}
+
+	// Get the variation attributes from meta
+	foreach ( $all_meta as $name => $value ) {
+		// Only look at valid attribute meta, and also compare variation level attributes and remove any which do not exist at parent level
+		if ( 0 !== strpos( $name, 'attribute_' ) || ! in_array( $name, $found_parent_attributes ) ) {
+			unset( $variation_attributes[ $name ] );
+			continue;
+		}
+		/**
+		 * Pre 2.4 handling where 'slugs' were saved instead of the full text attribute.
+		 * Attempt to get full version of the text attribute from the parent.
+		 */
+		if ( sanitize_title( $value[0] ) === $value[0] && version_compare( get_post_meta( $parent_id, '_product_version', true ), '2.4.0', '<' ) ) {
+			foreach ( $parent_attributes as $attribute ) {
+				if ( $name !== 'attribute_' . sanitize_title( $attribute['name'] ) ) {
+					continue;
+				}
+				$text_attributes = wc_get_text_attributes( $attribute['value'] );
+
+				foreach ( $text_attributes as $text_attribute ) {
+					if ( sanitize_title( $text_attribute ) === $value[0] ) {
+						$value[0] = $text_attribute;
+						break;
+					}
+				}
+			}
+		}
+
+		$variation_attributes[ $name ] = $value[0];
+	}
+
+	return $variation_attributes;
+}
+
+/**
+ * Get all product cats for a product by ID, including hierarchy
+ * @since  2.5.0
+ * @param  int $product_id
+ * @return array
+ */
+function wc_get_product_cat_ids( $product_id ) {
+	$product_cats = wp_get_post_terms( $product_id, 'product_cat', array( "fields" => "ids" ) );
+
+	foreach ( $product_cats as $product_cat ) {
+		$product_cats = array_merge( $product_cats, get_ancestors( $product_cat, 'product_cat' ) );
+	}
+
+	return $product_cats;
+}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              <?php
+/**
+ * WooCommerce Order Functions
+ *
+ * Functions for order specific things.
+ *
+ * @author 		WooThemes
+ * @category 	Core
+ * @package 	WooCommerce/Functions
+ * @version     2.1.0
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
+
+/**
+ * Get all order statuses.
+ *
+ * @since 2.2
+ * @return array
+ */
+function wc_get_order_statuses() {
+	$order_statuses = array(
+		'wc-pending'    => _x( 'Pending Payment', 'Order status', 'woocommerce' ),
+		'wc-processing' => _x( 'Processing', 'Order status', 'woocommerce' ),
+		'wc-on-hold'    => _x( 'On Hold', 'Order status', 'woocommerce' ),
+		'wc-completed'  => _x( 'Completed', 'Order status', 'woocommerce' ),
+		'wc-cancelled'  => _x( 'Cancelled', 'Order status', 'woocommerce' ),
+		'wc-refunded'   => _x( 'Refunded', 'Order status', 'woocommerce' ),
+		'wc-failed'     => _x( 'Failed', 'Order status', 'woocommerce' ),
+	);
+	return apply_filters( 'wc_order_statuses', $order_statuses );
+}
+
+/**
+ * See if a string is an order status.
+ * @param  string $maybe_status Status, including any wc- prefix
+ * @return bool
+ */
+function wc_is_order_status( $maybe_status ) {
+	$order_statuses = wc_get_order_statuses();
+	return isset( $order_statuses[ $maybe_status ] );
+}
+
+/**
+ * Main function for returning orders, uses the WC_Order_Factory class.
+ *
+ * @since  2.2
+ * @param  mixed $the_order Post object or post ID of the order.
+ * @return WC_Order
+ */
+function wc_get_order( $the_order = false ) {
+	if ( ! did_action( 'woocommerce_init' ) ) {
+		_doing_it_wrong( __FUNCTION__, __( 'wc_get_order should not be called before the woocommerce_init action.', 'woocommerce' ), '2.5' );
+		return false;
+	}
+	return WC()->order_factory->get_order( $the_order );
+}
+
+/**
+ * Get the nice name for an order status.
+ *
+ * @since  2.2
+ * @param  string $status
+ * @return string
+ */
+function wc_get_order_status_name( $status ) {
+	$statuses = wc_get_order_statuses();
+	$status   = 'wc-' === substr( $status, 0, 3 ) ? substr( $status, 3 ) : $status;
+	$status   = isset( $statuses[ 'wc-' . $status ] ) ? $statuses[ 'wc-' . $status ] : $status;
+
+	return $status;
+}
+
+/**
+ * Finds an Order ID based on an order key.
+ *
+ * @access public
+ * @param string $order_key An order key has generated by
+ * @return int The ID of an order, or 0 if the order could not be found
+ */
+function wc_get_order_id_by_order_key( $order_key ) {
+	global $wpdb;
+
+	// Faster than get_posts()
+	$order_id = $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM {$wpdb->prefix}postmeta WHERE meta_key = '_order_key' AND meta_value = %s", $order_key ) );
+
+	return $order_id;
+}
+
+/**
+ * Get all registered order types.
+ *
+ * $for optionally define what you are getting order types for so only relevent types are returned.
+ *
+ * e.g. for 'order-meta-boxes', 'order-count'
+ *
+ * @since  2.2
+ * @param  string $for
+ * @return array
+ */
+function wc_get_order_types( $for = '' ) {
+	global $wc_order_types;
+
+	if ( ! is_array( $wc_order_types ) ) {
+		$wc_order_types = array();
+	}
+
+	$order_types = array();
+
+	switch ( $for ) {
+		case 'order-count' :
+			foreach ( $wc_order_types as $type => $args ) {
+				if ( ! $args['exclude_from_order_count'] ) {
+					$order_types[] = $type;
+				}
+			}
+		break;
+		case 'order-meta-boxes' :
+			foreach ( $wc_order_types as $type => $args ) {
+				if ( $args['add_order_meta_boxes'] ) {
+					$order_types[] = $type;
+				}
+			}
+		break;
+		case 'view-orders' :
+			foreach ( $wc_order_types as $type => $args ) {
+				if ( ! $args['exclude_from_order_views'] ) {
+					$order_types[] = $type;
+				}
+			}
+		break;
+		case 'reports' :
+			foreach ( $wc_order_types as $type => $args ) {
+				if ( ! $args['exclude_from_order_reports'] ) {
+					$order_types[] = $type;
+				}
+			}
+		break;
+		case 'sales-reports' :
+			foreach ( $wc_order_types as $type => $args ) {
+				if ( ! $args['exclude_from_order_sales_reports'] ) {
+					$order_types[] = $type;
+				}
+			}
+		break;
+		case 'order-webhooks' :
+			foreach ( $wc_order_types as $type => $args ) {
+				if ( ! $args['exclude_from_order_webhooks'] ) {
+					$order_types[] = $type;
+				}
+			}
+		break;
+		default :
+			$order_types = array_keys( $wc_order_types );
+		break;
+	}
+
+	return apply_filters( 'wc_order_types', $order_types, $for );
+}
+
+/**
+ * Get an order type by post type name.
+ * @param  string post type name
+ * @return bool|array of datails about the order type
+ */
+function wc_get_order_type( $type ) {
+	global $wc_order_types;
+
+	if ( isset( $wc_order_types[ $type ] ) ) {
+		return $wc_order_types[ $type ];
+	} else {
+		return false;
+	}
+}
+
+/**
+ * Register order type. Do not use before init.
+ *
+ * Wrapper for register post type, as well as a method of telling WC which.
+ * post types are types of orders, and having them treated as such.
+ *
+ * $args are passed to register_post_type, but there are a few specific to this function:
+ * 		- exclude_from_orders_screen (bool) Whether or not this order type also get shown in the main.
+ * 		orders screen.
+ * 		- add_order_meta_boxes (bool) Whether or not the order type gets shop_order meta boxes.
+ * 		- exclude_from_order_count (bool) Whether or not this order type is excluded from counts.
+ * 		- exclude_from_order_views (bool) Whether or not this order type is visible by customers when.
+ * 		viewing orders e.g. on the my account page.
+ * 		- exclude_from_order_reports (bool) Whether or not to exclude this type from core reports.
+ * 		- exclude_fro

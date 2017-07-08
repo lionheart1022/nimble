@@ -1,0 +1,605 @@
+ *
+ * @since 2.5.0
+ *
+ * @global wpdb $wpdb The WordPress database class.
+ */
+function require_wp_db() {
+	global $wpdb;
+
+	require_once( ABSPATH . WPINC . '/wp-db.php' );
+	if ( file_exists( WP_CONTENT_DIR . '/db.php' ) )
+		require_once( WP_CONTENT_DIR . '/db.php' );
+
+	if ( isset( $wpdb ) )
+		return;
+
+	$wpdb = new wpdb( DB_USER, DB_PASSWORD, DB_NAME, DB_HOST );
+}
+
+/**
+ * Set the database table prefix and the format specifiers for database
+ * table columns.
+ *
+ * Columns not listed here default to `%s`.
+ *
+ * @since 3.0.0
+ * @access private
+ *
+ * @global wpdb   $wpdb         The WordPress database class.
+ * @global string $table_prefix The database table prefix.
+ */
+function wp_set_wpdb_vars() {
+	global $wpdb, $table_prefix;
+	if ( !empty( $wpdb->error ) )
+		dead_db();
+
+	$wpdb->field_types = array( 'post_author' => '%d', 'post_parent' => '%d', 'menu_order' => '%d', 'term_id' => '%d', 'term_group' => '%d', 'term_taxonomy_id' => '%d',
+		'parent' => '%d', 'count' => '%d','object_id' => '%d', 'term_order' => '%d', 'ID' => '%d', 'comment_ID' => '%d', 'comment_post_ID' => '%d', 'comment_parent' => '%d',
+		'user_id' => '%d', 'link_id' => '%d', 'link_owner' => '%d', 'link_rating' => '%d', 'option_id' => '%d', 'blog_id' => '%d', 'meta_id' => '%d', 'post_id' => '%d',
+		'user_status' => '%d', 'umeta_id' => '%d', 'comment_karma' => '%d', 'comment_count' => '%d',
+		// multisite:
+		'active' => '%d', 'cat_id' => '%d', 'deleted' => '%d', 'lang_id' => '%d', 'mature' => '%d', 'public' => '%d', 'site_id' => '%d', 'spam' => '%d',
+	);
+
+	$prefix = $wpdb->set_prefix( $table_prefix );
+
+	if ( is_wp_error( $prefix ) ) {
+		wp_load_translations_early();
+		wp_die( __( '<strong>ERROR</strong>: <code>$table_prefix</code> in <code>wp-config.php</code> can only contain numbers, letters, and underscores.' ) );
+	}
+}
+
+/**
+ * Toggle `$_wp_using_ext_object_cache` on and off without directly
+ * touching global.
+ *
+ * @since 3.7.0
+ *
+ * @global bool $_wp_using_ext_object_cache
+ *
+ * @param bool $using Whether external object cache is being used.
+ * @return bool The current 'using' setting.
+ */
+function wp_using_ext_object_cache( $using = null ) {
+	global $_wp_using_ext_object_cache;
+	$current_using = $_wp_using_ext_object_cache;
+	if ( null !== $using )
+		$_wp_using_ext_object_cache = $using;
+	return $current_using;
+}
+
+/**
+ * Start the WordPress object cache.
+ *
+ * If an object-cache.php file exists in the wp-content directory,
+ * it uses that drop-in as an external object cache.
+ *
+ * @since 3.0.0
+ * @access private
+ *
+ * @global int $blog_id Blog ID.
+ */
+function wp_start_object_cache() {
+	global $blog_id;
+
+	$first_init = false;
+ 	if ( ! function_exists( 'wp_cache_init' ) ) {
+		if ( file_exists( WP_CONTENT_DIR . '/object-cache.php' ) ) {
+			require_once ( WP_CONTENT_DIR . '/object-cache.php' );
+			if ( function_exists( 'wp_cache_init' ) )
+				wp_using_ext_object_cache( true );
+		}
+
+		$first_init = true;
+	} elseif ( ! wp_using_ext_object_cache() && file_exists( WP_CONTENT_DIR . '/object-cache.php' ) ) {
+		/*
+		 * Sometimes advanced-cache.php can load object-cache.php before
+		 * it is loaded here. This breaks the function_exists check above
+		 * and can result in `$_wp_using_ext_object_cache` being set
+		 * incorrectly. Double check if an external cache exists.
+		 */
+		wp_using_ext_object_cache( true );
+	}
+
+	if ( ! wp_using_ext_object_cache() )
+		require_once ( ABSPATH . WPINC . '/cache.php' );
+
+	/*
+	 * If cache supports reset, reset instead of init if already
+	 * initialized. Reset signals to the cache that global IDs
+	 * have changed and it may need to update keys and cleanup caches.
+	 */
+	if ( ! $first_init && function_exists( 'wp_cache_switch_to_blog' ) )
+		wp_cache_switch_to_blog( $blog_id );
+	elseif ( function_exists( 'wp_cache_init' ) )
+		wp_cache_init();
+
+	if ( function_exists( 'wp_cache_add_global_groups' ) ) {
+		wp_cache_add_global_groups( array( 'users', 'userlogins', 'usermeta', 'user_meta', 'useremail', 'userslugs', 'site-transient', 'site-options', 'site-lookup', 'blog-lookup', 'blog-details', 'rss', 'global-posts', 'blog-id-cache' ) );
+		wp_cache_add_non_persistent_groups( array( 'comment', 'counts', 'plugins' ) );
+	}
+}
+
+/**
+ * Redirect to the installer if WordPress is not installed.
+ *
+ * Dies with an error message when Multisite is enabled.
+ *
+ * @since 3.0.0
+ * @access private
+ */
+function wp_not_installed() {
+	if ( is_multisite() ) {
+		if ( ! is_blog_installed() && ! defined( 'WP_INSTALLING' ) ) {
+			nocache_headers();
+
+			wp_die( __( 'The site you have requested is not installed properly. Please contact the system administrator.' ) );
+		}
+	} elseif ( ! is_blog_installed() && ! defined( 'WP_INSTALLING' ) ) {
+		nocache_headers();
+
+		require( ABSPATH . WPINC . '/kses.php' );
+		require( ABSPATH . WPINC . '/pluggable.php' );
+		require( ABSPATH . WPINC . '/formatting.php' );
+
+		$link = wp_guess_url() . '/wp-admin/install.php';
+
+		wp_redirect( $link );
+		die();
+	}
+}
+
+/**
+ * Retrieve an array of must-use plugin files.
+ *
+ * The default directory is wp-content/mu-plugins. To change the default
+ * directory manually, define `WPMU_PLUGIN_DIR` and `WPMU_PLUGIN_URL`
+ * in wp-config.php.
+ *
+ * @since 3.0.0
+ * @access private
+ *
+ * @return array Files to include.
+ */
+function wp_get_mu_plugins() {
+	$mu_plugins = array();
+	if ( !is_dir( WPMU_PLUGIN_DIR ) )
+		return $mu_plugins;
+	if ( ! $dh = opendir( WPMU_PLUGIN_DIR ) )
+		return $mu_plugins;
+	while ( ( $plugin = readdir( $dh ) ) !== false ) {
+		if ( substr( $plugin, -4 ) == '.php' )
+			$mu_plugins[] = WPMU_PLUGIN_DIR . '/' . $plugin;
+	}
+	closedir( $dh );
+	sort( $mu_plugins );
+
+	return $mu_plugins;
+}
+
+/**
+ * Retrieve an array of active and valid plugin files.
+ *
+ * While upgrading or installing WordPress, no plugins are returned.
+ *
+ * The default directory is wp-content/plugins. To change the default
+ * directory manually, define `WP_PLUGIN_DIR` and `WP_PLUGIN_URL`
+ * in wp-config.php.
+ *
+ * @since 3.0.0
+ * @access private
+ *
+ * @return array Files.
+ */
+function wp_get_active_and_valid_plugins() {
+	$plugins = array();
+	$active_plugins = (array) get_option( 'active_plugins', array() );
+
+	// Check for hacks file if the option is enabled
+	if ( get_option( 'hack_file' ) && file_exists( ABSPATH . 'my-hacks.php' ) ) {
+		_deprecated_file( 'my-hacks.php', '1.5' );
+		array_unshift( $plugins, ABSPATH . 'my-hacks.php' );
+	}
+
+	if ( empty( $active_plugins ) || defined( 'WP_INSTALLING' ) )
+		return $plugins;
+
+	$network_plugins = is_multisite() ? wp_get_active_network_plugins() : false;
+
+	foreach ( $active_plugins as $plugin ) {
+		if ( ! validate_file( $plugin ) // $plugin must validate as file
+			&& '.php' == substr( $plugin, -4 ) // $plugin must end with '.php'
+			&& file_exists( WP_PLUGIN_DIR . '/' . $plugin ) // $plugin must exist
+			// not already included as a network plugin
+			&& ( ! $network_plugins || ! in_array( WP_PLUGIN_DIR . '/' . $plugin, $network_plugins ) )
+			)
+		$plugins[] = WP_PLUGIN_DIR . '/' . $plugin;
+	}
+	return $plugins;
+}
+
+/**
+ * Set internal encoding.
+ *
+ * In most cases the default internal encoding is latin1, which is
+ * of no use, since we want to use the `mb_` functions for `utf-8` strings.
+ *
+ * @since 3.0.0
+ * @access private
+ */
+function wp_set_internal_encoding() {
+	if ( function_exists( 'mb_internal_encoding' ) ) {
+		$charset = get_option( 'blog_charset' );
+		if ( ! $charset || ! @mb_internal_encoding( $charset ) )
+			mb_internal_encoding( 'UTF-8' );
+	}
+}
+
+/**
+ * Add magic quotes to `$_GET`, `$_POST`, `$_COOKIE`, and `$_SERVER`.
+ *
+ * Also forces `$_REQUEST` to be `$_GET + $_POST`. If `$_SERVER`,
+ * `$_COOKIE`, or `$_ENV` are needed, use those superglobals directly.
+ *
+ * @since 3.0.0
+ * @access private
+ */
+function wp_magic_quotes() {
+	// If already slashed, strip.
+	if ( get_magic_quotes_gpc() ) {
+		$_GET    = stripslashes_deep( $_GET    );
+		$_POST   = stripslashes_deep( $_POST   );
+		$_COOKIE = stripslashes_deep( $_COOKIE );
+	}
+
+	// Escape with wpdb.
+	$_GET    = add_magic_quotes( $_GET    );
+	$_POST   = add_magic_quotes( $_POST   );
+	$_COOKIE = add_magic_quotes( $_COOKIE );
+	$_SERVER = add_magic_quotes( $_SERVER );
+
+	// Force REQUEST to be GET + POST.
+	$_REQUEST = array_merge( $_GET, $_POST );
+}
+
+/**
+ * Runs just before PHP shuts down execution.
+ *
+ * @since 1.2.0
+ * @access private
+ */
+function shutdown_action_hook() {
+	/**
+	 * Fires just before PHP shuts down execution.
+	 *
+	 * @since 1.2.0
+	 */
+	do_action( 'shutdown' );
+
+	wp_cache_close();
+}
+
+/**
+ * Copy an object.
+ *
+ * @since 2.7.0
+ * @deprecated 3.2.0
+ *
+ * @param object $object The object to clone.
+ * @return object The cloned object.
+ */
+function wp_clone( $object ) {
+	// Use parens for clone to accommodate PHP 4. See #17880
+	return clone( $object );
+}
+
+/**
+ * Whether the current request is for an administrative interface page.
+ *
+ * Does not check if the user is an administrator; {@see current_user_can()}
+ * for checking roles and capabilities.
+ *
+ * @since 1.5.1
+ *
+ * @global WP_Screen $current_screen
+ *
+ * @return bool True if inside WordPress administration interface, false otherwise.
+ */
+function is_admin() {
+	if ( isset( $GLOBALS['current_screen'] ) )
+		return $GLOBALS['current_screen']->in_admin();
+	elseif ( defined( 'WP_ADMIN' ) )
+		return WP_ADMIN;
+
+	return false;
+}
+
+/**
+ * Whether the current request is for a site's admininstrative interface.
+ *
+ * e.g. `/wp-admin/`
+ *
+ * Does not check if the user is an administrator; {@see current_user_can()}
+ * for checking roles and capabilities.
+ *
+ * @since 3.1.0
+ *
+ * @global WP_Screen $current_screen
+ *
+ * @return bool True if inside WordPress blog administration pages.
+ */
+function is_blog_admin() {
+	if ( isset( $GLOBALS['current_screen'] ) )
+		return $GLOBALS['current_screen']->in_admin( 'site' );
+	elseif ( defined( 'WP_BLOG_ADMIN' ) )
+		return WP_BLOG_ADMIN;
+
+	return false;
+}
+
+/**
+ * Whether the current request is for the network administrative interface.
+ *
+ * e.g. `/wp-admin/network/`
+ *
+ * Does not check if the user is an administrator; {@see current_user_can()}
+ * for checking roles and capabilities.
+ *
+ * @since 3.1.0
+ *
+ * @global WP_Screen $current_screen
+ *
+ * @return bool True if inside WordPress network administration pages.
+ */
+function is_network_admin() {
+	if ( isset( $GLOBALS['current_screen'] ) )
+		return $GLOBALS['current_screen']->in_admin( 'network' );
+	elseif ( defined( 'WP_NETWORK_ADMIN' ) )
+		return WP_NETWORK_ADMIN;
+
+	return false;
+}
+
+/**
+ * Whether the current request is for a user admin screen.
+ *
+ * e.g. `/wp-admin/user/`
+ *
+ * Does not inform on whether the user is an admin! Use capability
+ * checks to tell if the user should be accessing a section or not
+ * {@see current_user_can()}.
+ *
+ * @since 3.1.0
+ *
+ * @global WP_Screen $current_screen
+ *
+ * @return bool True if inside WordPress user administration pages.
+ */
+function is_user_admin() {
+	if ( isset( $GLOBALS['current_screen'] ) )
+		return $GLOBALS['current_screen']->in_admin( 'user' );
+	elseif ( defined( 'WP_USER_ADMIN' ) )
+		return WP_USER_ADMIN;
+
+	return false;
+}
+
+/**
+ * If Multisite is enabled.
+ *
+ * @since 3.0.0
+ *
+ * @return bool True if Multisite is enabled, false otherwise.
+ */
+function is_multisite() {
+	if ( defined( 'MULTISITE' ) )
+		return MULTISITE;
+
+	if ( defined( 'SUBDOMAIN_INSTALL' ) || defined( 'VHOST' ) || defined( 'SUNRISE' ) )
+		return true;
+
+	return false;
+}
+
+/**
+ * Retrieve the current blog ID.
+ *
+ * @since 3.1.0
+ *
+ * @global int $blog_id
+ *
+ * @return int Blog id
+ */
+function get_current_blog_id() {
+	global $blog_id;
+	return absint($blog_id);
+}
+
+/**
+ * Attempt an early load of translations.
+ *
+ * Used for errors encountered during the initial loading process, before
+ * the locale has been properly detected and loaded.
+ *
+ * Designed for unusual load sequences (like setup-config.php) or for when
+ * the script will then terminate with an error, otherwise there is a risk
+ * that a file can be double-included.
+ *
+ * @since 3.4.0
+ * @access private
+ *
+ * @global string    $text_direction
+ * @global WP_Locale $wp_locale      The WordPress date and time locale object.
+ *
+ * @staticvar bool $loaded
+ */
+function wp_load_translations_early() {
+	global $text_direction, $wp_locale;
+
+	static $loaded = false;
+	if ( $loaded )
+		return;
+	$loaded = true;
+
+	if ( function_exists( 'did_action' ) && did_action( 'init' ) )
+		return;
+
+	// We need $wp_local_package
+	require ABSPATH . WPINC . '/version.php';
+
+	// Translation and localization
+	require_once ABSPATH . WPINC . '/pomo/mo.php';
+	require_once ABSPATH . WPINC . '/l10n.php';
+	require_once ABSPATH . WPINC . '/locale.php';
+
+	// General libraries
+	require_once ABSPATH . WPINC . '/plugin.php';
+
+	$locales = $locations = array();
+
+	while ( true ) {
+		if ( defined( 'WPLANG' ) ) {
+			if ( '' == WPLANG )
+				break;
+			$locales[] = WPLANG;
+		}
+
+		if ( isset( $wp_local_package ) )
+			$locales[] = $wp_local_package;
+
+		if ( ! $locales )
+			break;
+
+		if ( defined( 'WP_LANG_DIR' ) && @is_dir( WP_LANG_DIR ) )
+			$locations[] = WP_LANG_DIR;
+
+		if ( defined( 'WP_CONTENT_DIR' ) && @is_dir( WP_CONTENT_DIR . '/languages' ) )
+			$locations[] = WP_CONTENT_DIR . '/languages';
+
+		if ( @is_dir( ABSPATH . 'wp-content/languages' ) )
+			$locations[] = ABSPATH . 'wp-content/languages';
+
+		if ( @is_dir( ABSPATH . WPINC . '/languages' ) )
+			$locations[] = ABSPATH . WPINC . '/languages';
+
+		if ( ! $locations )
+			break;
+
+		$locations = array_unique( $locations );
+
+		foreach ( $locales as $locale ) {
+			foreach ( $locations as $location ) {
+				if ( file_exists( $location . '/' . $locale . '.mo' ) ) {
+					load_textdomain( 'default', $location . '/' . $locale . '.mo' );
+					if ( defined( 'WP_SETUP_CONFIG' ) && file_exists( $location . '/admin-' . $locale . '.mo' ) )
+						load_textdomain( 'default', $location . '/admin-' . $locale . '.mo' );
+					break 2;
+				}
+			}
+		}
+
+		break;
+	}
+
+	$wp_locale = new WP_Locale();
+}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       <?php
+/**
+ * Simple and uniform HTTP request API.
+ *
+ * Will eventually replace and standardize the WordPress HTTP requests made.
+ *
+ * @link https://core.trac.wordpress.org/ticket/4779 HTTP API Proposal
+ *
+ * @package WordPress
+ * @subpackage HTTP
+ * @since 2.7.0
+ */
+
+/**
+ * Returns the initialized WP_Http Object
+ *
+ * @since 2.7.0
+ * @access private
+ *
+ * @staticvar WP_Http $http
+ *
+ * @return WP_Http HTTP Transport object.
+ */
+function _wp_http_get_object() {
+	static $http = null;
+
+	if ( is_null( $http ) ) {
+		$http = new WP_Http();
+	}
+	return $http;
+}
+
+/**
+ * Retrieve the raw response from a safe HTTP request.
+ *
+ * This function is ideal when the HTTP request is being made to an arbitrary
+ * URL. The URL is validated to avoid redirection and request forgery attacks.
+ *
+ * @since 3.6.0
+ *
+ * @see wp_remote_request() For more information on the response array format.
+ * @see WP_Http::request() For default arguments information.
+ *
+ * @param string $url  Site URL to retrieve.
+ * @param array  $args Optional. Request arguments. Default empty array.
+ * @return WP_Error|array The response or WP_Error on failure.
+ */
+function wp_safe_remote_request( $url, $args = array() ) {
+	$args['reject_unsafe_urls'] = true;
+	$http = _wp_http_get_object();
+	return $http->request( $url, $args );
+}
+
+/**
+ * Retrieve the raw response from a safe HTTP request using the GET method.
+ *
+ * This function is ideal when the HTTP request is being made to an arbitrary
+ * URL. The URL is validated to avoid redirection and request forgery attacks.
+ *
+ * @since 3.6.0
+ *
+ * @see wp_remote_request() For more information on the response array format.
+ * @see WP_Http::request() For default arguments information.
+ *
+ * @param string $url  Site URL to retrieve.
+ * @param array  $args Optional. Request arguments. Default empty array.
+ * @return WP_Error|array The response or WP_Error on failure.
+ */
+function wp_safe_remote_get( $url, $args = array() ) {
+	$args['reject_unsafe_urls'] = true;
+	$http = _wp_http_get_object();
+	return $http->get( $url, $args );
+}
+
+/**
+ * Retrieve the raw response from a safe HTTP request using the POST method.
+ *
+ * This function is ideal when the HTTP request is being made to an arbitrary
+ * URL. The URL is validated to avoid redirection and request forgery attacks.
+ *
+ * @since 3.6.0
+ *
+ * @see wp_remote_request() For more information on the response array format.
+ * @see WP_Http::request() For default arguments information.
+ *
+ * @param string $url  Site URL to retrieve.
+ * @param array  $args Optional. Request arguments. Default empty array.
+ * @return WP_Error|array The response or WP_Error on failure.
+ */
+function wp_safe_remote_post( $url, $args = array() ) {
+	$args['reject_unsafe_urls'] = true;
+	$http = _wp_http_get_object();
+	return $http->post( $url, $args );
+}
+
+/**
+ * Retrieve the raw response from a safe HTTP request using the HEAD method.
+ *
+ * This function is ideal when the HTTP request is being made to an arbitrary
+ * URL. The URL is validat

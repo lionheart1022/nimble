@@ -1,0 +1,1423 @@
+ } }
+  .cols-3, &.columns-3 { li.product { width: 30.66667%; } }
+  .cols-4, &.columns-4 { li.product { width: 22%;       } }
+
+  .cols-3,
+  .cols-4,
+  &.columns-3,
+  &.columns-4 {
+    li.product {
+      @include break(cubs) {
+        width: 48%;
+
+        &.first           { clear: none;      }
+        &.last            { margin-right: 4%; }
+        &:nth-child(2n+3) { clear: both;      }
+        &:nth-child(2n+2) { margin-right: 0;  }
+      }
+    }
+  }
+
+  .cols-2,
+  .cols-3,
+  .cols-4,
+  &.columns-2,
+  &.columns-3,
+  &.columns-4 {
+    li.product {
+      @include break(baby-bear) {
+        width: 100%;
+      }
+    }
+  }
+}
+
+
+
+// Popups
+// =============================================================================
+
+.woocommerce,
+.woocommerce-page {
+  .pp_woocommerce {
+    .ppt {
+      visibility: hidden;
+    }
+
+    .pp_content_container {
+      padding-top: 40px;
+      padding-bottom: 10px;
+    }
+
+    .pp_expand:before,
+    .pp_contract:before {
+      top: -1px;
+      right: -1px;
+    }
+
+    .pp_nav {
+      line-height: 1;
+    }
+
+    .pp_arrow_previous:before,
+    .pp_arrow_next:before {
+      top: -1px;
+    }
+
+    .pp_close:before {
+      top: -1px;
+    }
+
+    .pp_description {
+      visibility: hidden;
+    }
+  }
+}
+
+
+
+// Price
+// =============================================================================
+
+.woocommerce,
+.woocommerce-page {
+  .price {
+    display: block;
+    line-height: 1;
+    @include clearfix();
+
+    > .from,
+    > del {
+      color: inherit;
+    }
+
+    > ins {
+      text-decoration: none;
+    }
+
+    > .amount,
+    > ins > .amount {
+      color: inherit;
+    }
+  }
+}
+
+
+
+// Sale Badge
+// =============================================================================
+
+.woocommerce,
+.woocommerce-page {
+  .onsale {
+    position: absolute;
+    display: block;
+    width: 200px;
+    height: 100px;
+    @include font-size(1.4);
+    letter-spacing: 0;
+    line-height: 160px;
+    text-align: center;
+    text-transform: uppercase;
+    color: $white;
+    background-color: $accentColor;
+    z-index: 1;
+    @include rotate(-45deg);
+  }
+}
+
+
+
+// Star Rating
+// =============================================================================
+
+.woocommerce,
+.woocommerce-page {
+  .star-rating-container {
+    display: inline-block;
+  }
+
+  .star-rating {
+    display: block;
+    overflow: hidden;
+    position: relative;
+    float: none;
+    width: 5.4em;
+    height: 1em;
+    margin: 0;
+    font-size: 1em;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-family: "star";
+    line-height: 1em;
+
+    &:before {
+      content: "\73\73\73\73\73";
+      position: absolute;
+      top: 0;
+      left: 0;
+      float: left;
+      color: $accentColor;
+    }
+
+    span {
+      overflow: hidden;
+      position: absolute;
+      top: 0;
+      left: 0;
+      float: left;
+      padding-top: 1.5em;
+
+      &:before {
+        content: "\53\53\53\53\53";
+        position: absolute;
+        top: 0;
+        left: 0;
+        color: $accentColor;
+      }
+    }
+  }
+
+  .x-comments-area {
+    .star-rating-container.aggregate {
+      @include font-size(2.1);
+      margin-bottom: 8px;
+    }
+  }
+
+  li.product {
+    .star-rating-container {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 7px;
+      background-color: $black;
+      background-color: rgba(0, 0, 0, 0.5);
+      @include opacity(0);
+      @include translate3d(0, 0, 0);
+      @include transition(#{opacity 0.3s ease});
+
+      .star-rating {
+        &:before {
+          color: $white;
+        }
+
+        span {
+          &:before {
+            color: $white;
+          }
+        }
+      }
+    }
+  }
+
+  p.stars {
+    margin-bottom: 1.5em;
+    @include clearfix();
+
+    span {
+      position: relative;
+      float: left;
+
+      a {
+        float: left;
+        padding-right: 5px;
+        line-height: 1em;
+
+        &.star-1,
+        &.star-2,
+        &.star-3,
+        &.star-4,
+        &.star-5 {
+          &:after {
+            display: none;
+            width: 7em;
+            padding: 0 1em;
+            position: absolute;
+            top: 0;
+            right: -9.5em;
+            font-size: 0.5em;
+            text-align: center;
+            color: $textColor;
+            background-color: #e5e5e5;
+            @include font-awesome();
+          }
+        }
+
+        &.star-1 {
+          &:after {
+            content: "\f005";
+          }
+        }
+
+        &.star-2 {
+          &:after {
+            content: "\f005\0020\f005";
+          }
+        }
+
+        &.star-3 {
+          &:after {
+            content: "\f005\0020\f005\0020\f005";
+          }
+        }
+
+        &.star-4 {
+          &:after {
+            content: "\f005\0020\f005\0020\f005\0020\f005";
+          }
+        }
+
+        &.star-5 {
+          &:after {
+            content: "\f005\0020\f005\0020\f005\0020\f005\0020\f005";
+          }
+        }
+
+        &.active {
+          &:after {
+            display: block;
+          }
+        }
+
+        &:hover,
+        &:focus {
+          &:after {
+            display: block;
+            z-index: 1;
+          }
+        }
+      }
+    }
+  }
+}
+
+@font-face {
+  font-family: "star";
+  src: url("../../../../../../plugins/woocommerce/assets/fonts/star.eot");
+  src: url("../../../../../../plugins/woocommerce/assets/fonts/star.eot?#iefix") format("embedded-opentype"),
+       url("../../../../../../plugins/woocommerce/assets/fonts/star.woff") format("woff"),
+       url("../../../../../../plugins/woocommerce/assets/fonts/star.ttf") format("truetype"),
+       url("../../../../../../plugins/woocommerce/assets/fonts/star.svg#star") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+
+// Review Form
+// =============================================================================
+
+.woocommerce,
+.woocommerce-page {
+  #respond {
+    margin-bottom: 0;
+  }
+
+  #reply-title {
+    margin-top: 0;
+  }
+
+  #comments {
+    position: relative;
+    margin-top: 0;
+
+    .x-comments-list {
+      margin-top: $layoutSpacing;
+
+      .x-comment-img {
+        .avatar-wrap {
+          &:before {
+            display: none;
+          }
+
+          .avatar {
+            width: 60px;
+          }
+        }
+
+        @include break(middle-bear) {
+          display: none;
+        }
+      }
+
+      article.comment {
+        @include break(middle-bear) {
+          margin-left: 0;
+        }
+      }
+
+      .x-comment-header {
+        .star-rating-container {
+          display: block;
+          margin-top: 4px;
+        }
+      }
+    }
+  }
+}
+
+
+
+// Results Count and Ordering
+// =============================================================================
+
+.woocommerce-result-count {
+  float: right;
+  height: 2.95em;
+  padding: 0 12px;
+  border: 1px solid $shortcodeBorderColor;
+  line-height: 2.75em;
+  @include font-size(1.1);
+  background-color: $shortcodeBorderColor;
+}
+
+.woocommerce-ordering {
+  float: left;
+
+  select {
+    width: 100%;
+    margin-bottom: 0;
+    @include font-size(1.1);
+    border-color: $shortcodeBorderColor;
+    background-color: $shortcodeBorderColor;
+  }
+}
+
+.woocommerce-result-count,
+.woocommerce-ordering {
+  @include break(baby-bear) {
+    float: none;
+  }
+}
+
+
+
+// Messages and Errors
+// =============================================================================
+
+.woocommerce-message,
+.woocommerce-error,
+.woocommerce-info {
+  a {
+    color: inherit;
+    text-decoration: underline;
+
+    &:hover {
+      color: inherit;
+    }
+  }
+}
+
+.woocommerce-message {
+  .button {
+    display: block;
+    margin: 0 0 0 40px;
+    border: 0;
+    padding: 0;
+    float: right;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    color: inherit;
+    text-align: inherit;
+    text-shadow: inherit;
+    background-color: transparent;
+    @include box-shadow(#{none});
+
+    &:hover {
+      margin: 0;
+      border: 0;
+      padding: 0;
+      color: inherit;
+      text-decoration: underline;
+      text-shadow: inherit;
+      background-color: transparent;
+      @include box-shadow(#{none});
+    }
+  }
+}
+
+.woocommerce-error {
+  margin: $baseMargin 0;
+  list-style: none;
+}
+
+.woocommerce-info {
+  margin-bottom: $baseMargin;
+}
+
+
+
+// Form Feedback States
+// =============================================================================
+
+.woocommerce-invalid {
+  input {
+    color: $errorText;
+    border-color: $errorBorder;
+  }
+}
+
+.woocommerce-validated {
+  input {
+    color: $successText;
+    border-color: $successBorder;
+  }
+}
+
+
+
+// Button Icons
+// =============================================================================
+
+.woocommerce,
+.woocommerce-page {
+  .button {
+    &.product_type_simple:before,
+    &.product_type_variable:before,
+    &.single_add_to_cart_button:before {
+      @include font-awesome();
+    }
+
+    &.product_type_simple:before,
+    &.single_add_to_cart_button:before {
+      content: "\f07a\0020";
+    }
+
+    &.product_type_variable:before {
+      content: "\f14a\0020";
+    }
+  }
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     // =============================================================================
+// SCSS/SITE/STACKS/ETHOS/_SHORTCODES.SCSS
+// -----------------------------------------------------------------------------
+// Styles for shortcodes.
+// =============================================================================
+
+// =============================================================================
+// TABLE OF CONTENTS
+// -----------------------------------------------------------------------------
+//   01. Dropcap
+//   02. Horizontal Rule
+//   03. Gap
+//   04. Clear
+//   05. Highlight
+//   06. Quotes
+//       a. Blockquote
+//       b. Pullquote
+//       c. Cite
+//   07. Alert
+//   08. Maps
+//   09. Skill Bar
+//   10. Code
+//   11. Buttons
+//       a. Individual Buttons
+//       b. Button Group
+//   12. Icons
+//   13. Block Grid
+//       a. Grid
+//       b. Grid Item
+//   14. Images
+//   15. Icon list
+//       a. List
+//       b. List Item
+//   16. Popovers and Tooltips
+//   17. Text Columns
+//   18. Video
+//   19. Accordion
+//       a. Accordion
+//       b. Accordion Item
+//   20. Tabbed Content
+//       a. Tab Nav
+//       b. Tab Nav Item
+//       c. Tabs
+//       d. Tab
+//   21. Responsive Visibility
+//   22. Content Columns
+//   23. Responsive Slider
+//       a. Slider
+//       b. Slide
+//   24. Protected Content
+//   25. Recent Posts
+//   26. Audio
+//   27. Responsive Pricing Table
+//   28. Callout
+//   29. Promo
+//   30. Post Author
+//   31. Prompt
+//   32. Content Band
+//   33. Entry Share
+//   34. Table of Contents
+//       a. Container
+//       b. Item
+//   35. Custom Headline
+//   36. Feature Headline
+//   37. Search
+//   38. Counter
+//   39. Shortcode Container
+// =============================================================================
+
+// Dropcaps
+// =============================================================================
+
+.x-dropcap {
+  float: left;
+  display: block;
+  margin: 0.215em 0.275em 0 0;
+  padding: 0.125em 0.275em 0.15em;
+  font-size: 3.3em;
+  font-weight: bold;
+  line-height: 1;
+  color: $white;
+  background-color: $navbarBackground;
+}
+
+
+
+// Horizontal Rules
+// =============================================================================
+
+.x-hr {  }
+
+
+
+// Gaps
+// =============================================================================
+
+.x-gap {  }
+
+
+
+// Clear
+// =============================================================================
+
+.x-clear {  }
+
+
+
+// Highlight
+// =============================================================================
+
+.x-highlight {
+  padding: 0.188em 0.375em;
+  background-color: #fffac0;
+
+  &.dark {
+    color: $white;
+    background-color: darken($gray, 5%);
+  }
+}
+
+
+
+// Quotes
+// =============================================================================
+
+//
+// 1. Blockquote.
+// 2. Pullquote.
+// 3. Cite.
+//
+
+.x-blockquote { // 1
+  &.right-text {
+    text-align: right;
+  }
+
+  &.center-text {
+    text-align: center;
+  }
+}
+
+.x-pullquote { // 2
+  width: 40%;
+  margin: 0.45em 1.1em 0.55em 0;
+  font-size: 1.313em;
+
+  &.right {
+    margin-right: 0;
+    margin-left: 1.1em;
+  }
+
+  &.left,
+  &.right {
+    @include break(middle-bear) {
+      float: none;
+      width: 100%;
+      margin: $baseMargin 0;
+    }
+  }
+}
+
+.x-cite { // 3
+  display: block;
+  margin-top: 0.5em;
+  font-size: 0.775em;
+  color: $textColor;
+
+  &:before {
+    content: "\2013\00A0";
+  }
+}
+
+
+
+// Alert
+// =============================================================================
+
+//
+// Close.
+//
+
+.close {
+  float: right;
+  @include font-size(1.8);
+  font-weight: bold;
+  line-height: $baseLineHeight;
+  color: $black;
+  @include transition(#{opacity 0.3s ease});
+  
+  &:hover {
+    color: $black;
+    text-decoration: none;
+    cursor: pointer;
+    @include opacity(0.25);
+  }
+}
+
+button.close {
+  padding: 0;
+  cursor: pointer;
+  background-color: transparent;
+  border: 0;
+  -webkit-appearance: none;
+}
+
+
+//
+// Close alert.
+//
+
+.x-alert,
+.wpcf7-response-output,
+.buddypress #message,
+.bbp-template-notice {
+  margin-bottom: $baseMargin;
+  border: 2px solid $warningBorder;
+  padding: $alertPadding;
+  @include font-size(1.4);
+  line-height: $alertLineHeight;
+  color: $warningText;
+  background-color: $baseModBackground;
+
+  .h-alert {
+    margin: $alertHeadingMargin;
+    @include font-size(1.8);
+    letter-spacing: -1px;
+    line-height: 1.3;
+    text-transform: none;
+    color: inherit;
+  }
+
+  .close {
+    position: relative;
+    top: -10px;
+    right: -26px;
+    line-height: 1;
+    color: $warningText;
+  }
+}
+
+.x-alert-muted {
+  border-color: $mutedBorder;
+  color:        $mutedText;
+
+  .close {
+    color: $grayLight;
+  }
+}
+
+.x-alert-info,
+.buddypress #message.info,
+.bbp-template-notice.info {
+  border-color: $infoBorder;
+  color:        $infoText;
+
+  .close {
+    color: $infoText;
+  }
+}
+
+.x-alert-success,
+.wpcf7-mail-sent-ok,
+.buddypress #message.updated,
+.bbp-template-notice.updated {
+  border-color: $successBorder;
+  color:        $successText;
+
+  .close {
+    color: $successText;
+  }
+}
+
+.x-alert-danger,
+.buddypress #message.error,
+.bbp-template-notice.error {
+  border-color: $errorBorder;
+  color:        $errorText;
+
+  .close {
+    color: $errorText;
+  }
+}
+
+.x-alert-block {
+  padding: $alertBlockPadding;
+}
+
+.x-alert-block > p,
+.x-alert-block > ul {
+  margin-bottom: 0;
+}
+
+.x-alert-block p + p {
+  margin-top: 6px;
+}
+
+.wpcf7-response-output {
+  border-width: 2px !important;
+  margin: $baseMargin 0 0 !important;
+  padding: $alertBlockPadding !important;
+}
+
+
+
+// Maps
+// =============================================================================
+
+.x-map {  }
+
+
+
+// Skill Bar
+// =============================================================================
+
+.h-skill-bar {
+  margin-top: 0;
+  @include font-size(1.2);
+  font-weight: 700;
+  letter-spacing: 1px;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.x-skill-bar {
+  height: 28px;
+  margin-bottom: $baseMargin;
+  background-color: $bodyBackground;
+}
+
+.x-skill-bar .bar {
+  overflow: hidden;
+  position: relative;
+  width: 0%;
+  height: 100%;
+  float: left;
+  background-color: $accentColor;
+}
+
+.x-skill-bar .bar .percent {
+  position: absolute;
+  right: 3px;
+  bottom: 6px;
+  padding: 0 5px;
+  @include font-size(1.4);
+  line-height: 17px;
+  color: $baseModBackground;
+}
+
+
+
+// Code
+// =============================================================================
+
+.x-code {  }
+
+
+
+// Buttons
+// =============================================================================
+
+.x-btn {  }
+
+
+
+// Icons
+// =============================================================================
+
+.x-icon {  }
+
+
+
+// Block Grid
+// =============================================================================
+
+.x-block-grid {  }
+
+
+
+// Images
+// =============================================================================
+
+.x-img {
+  margin-bottom: $baseMargin;
+
+  &.left {
+    margin: 0.35em $baseMargin 0.35em 0;
+  }
+
+  &.right {
+    margin: 0.35em 0 0.35em $baseMargin;
+  }
+}
+
+
+//
+// Link hover styles.
+//
+
+a.x-img {
+  display: block;
+
+  > img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+a.x-img:not(.x-img-thumbnail) {
+  @include translate3d(0, 0, 0);
+  @include transition(#{opacity 0.3s ease});
+
+  &:hover {
+    opacity: 0.75;
+  }
+}
+
+
+//
+// Rounded.
+//
+
+.x-img-rounded {
+  &,
+  img {
+    border-radius: 6px;
+  }
+}
+
+
+//
+// Circle.
+//
+
+.x-img-circle {
+  &,
+  img {
+    border-radius: 100em;
+  }
+}
+
+
+//
+// Thumbnail.
+//
+
+.x-img-thumbnail {
+  @include img_thumbnail();
+}
+
+a.x-img-thumbnail:hover {
+  border-color: $accentColor;
+}
+
+
+
+// Icon List
+// =============================================================================
+
+.x-ul-icons {
+  margin-left: 1.425em;
+  list-style: none;
+  text-indent: -0.85em;
+
+  li {
+    [class^="x-icon-"],
+    [class*=" x-icon-"] {
+      width: 0.85em;
+    }
+  }
+}
+
+
+
+// Popovers and Tooltips
+// =============================================================================
+
+.x-extra {  }
+
+
+
+// Text Columns
+// =============================================================================
+
+.x-columnize {
+  @include content-columns( 2, 3em, 1px solid $shortcodeBorderColor );
+  margin: 0 0 $baseMargin;
+
+  p:last-child,
+  ul:last-child,
+  ol:last-child {
+    margin-bottom: 0;
+  }
+
+  @include break(baby-bear) { @include content-columns(1, 0, 0); }
+}
+
+
+
+// Video
+// =============================================================================
+
+.x-video {  }
+
+
+
+// Accordion
+// =============================================================================
+
+//
+// Parent container.
+//
+
+.x-accordion {
+  margin-bottom: 1.375em;
+}
+
+
+//
+// Group == beading + body.
+//
+
+.x-accordion-group {
+  margin: 8px 0;
+  background-color: $baseModBackground;
+  // @include box-shadow(#{$shortcodeBoxShadow});
+}
+
+.x-accordion-heading {
+  overflow: hidden;
+  border-bottom: 0;
+
+  .x-accordion-toggle {
+    display: block;
+    padding: 9px 15px 10px;
+    font-family: $altFontFamily;
+    font-weight: 400;
+    font-size: 114.2%;
+    text-transform: uppercase;
+    color: $baseModBackground;
+    background-color: $navbarBackground;
+
+    &.collapsed {
+      background-color: $navbarBackground;
+
+      &:before {
+        color: rgba(255, 255, 255, 0.25);
+        @include rotate(0);
+      }
+    }
+
+    &:hover {
+      color: $baseModBackground;
+
+      &:before {
+        color: $baseModBackground;
+      }
+    }
+
+    &:before {
+      content: "\f078";
+      position: relative;
+      display: inline-block;
+      bottom: 0.05em;
+      margin-right: 10px;
+      color: $baseModBackground;
+      @include rotate(-180deg);
+      @include transition(#{all 0.3s ease});
+      @include font-awesome();
+    }
+  }
+}
+
+
+//
+// General toggle styles.
+//
+
+.x-accordion-toggle {
+  cursor: pointer;
+}
+
+
+//
+// Accordion inner.
+// Needs the styles because you can't animate properly with any stiles on the
+// element.
+//
+
+.x-accordion-inner {
+  padding: 4%;
+  border: 1px solid $shortcodeBorderColor;
+  border-top: 0;
+  background-color: $baseModBackground;
+
+  p:last-child,
+  ul:last-child,
+  ol:last-child {
+    margin-bottom: 0;
+  }
+}
+
+
+
+// Tabbed Content
+// =============================================================================
+
+.x-nav-tabs {  }
+
+.x-nav-tabs-item {  }
+
+.x-tab-content {  }
+
+.x-nav-pane {  }
+
+
+
+// Responsive Visibility
+// =============================================================================
+
+.x-visibility {  }
+
+
+
+// Content Columns
+// =============================================================================
+
+@include columns();
+
+
+
+// Responsive Slider
+// =============================================================================
+
+.x-flexslider-shortcode-container {  }
+
+
+
+// Protected Content
+// =============================================================================
+
+.x-protect {
+  border: 1px solid $shortcodeBorderColor;
+  padding: 7% 18%;
+  text-align: center;
+  background-color: $baseModBackground;
+  // @include box-shadow(#{$shortcodeBoxShadow});
+
+  label {
+    margin: 0.75em 0 0;
+    @include font-size(1.6);
+    color: $textColor;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+  }
+}
+
+.h-protect {
+  @include font-size(1.8);
+  line-height: 1.2;
+  color: $headingsColor;
+}
+
+.x-btn-protect {
+  margin-top: 0.75em;
+}
+
+
+
+// Recent Posts
+// =============================================================================
+
+.x-recent-posts {
+  margin: 0 0 $baseMargin;
+
+  + .x-recent-posts {
+    margin-top: 4%;
+  }
+
+  a {
+    overflow: hidden;
+    float: left;
+    display: block;
+    margin: 0 4% 0 0;
+    border: 1px solid $shortcodeBorderColor;
+    padding: 5px 5px 0;
+    color: #999;
+    background-color: $baseModBackground;
+    // @include box-shadow(#{$shortcodeBoxShadow});
+    @include translate3d(0, 0, 0);
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &:hover {
+      color: #999;
+      border-color: $navbarBackground;
+    }
+
+    &.no-image {
+      padding: 5px;
+    }
+
+    &.x-recent-post1 {
+      width: 100%;
+    }
+
+    &.x-recent-post2 {
+      width: 48%;
+      @include break(middle-bear) {
+        width: 100%;
+        float: none;
+        margin-right: 0;
+        margin-bottom: 4%;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    &.x-recent-post3 {
+      width: 30.6666%;
+      @include break(middle-bear) {
+        width: 100%;
+        float: none;
+        margin-right: 0;
+        margin-bottom: 4%;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    &.x-recent-post4 {
+      width: 22%;
+      @include break(cubs) {
+        width: 48%;
+
+        &:first-child {
+          margin-bottom: 4%;
+        }
+
+        &:nth-child(2n) {
+          margin-right: 0;
+          margin-bottom: 4%;
+        }
+
+        &:nth-child(3),
+        &:nth-child(4) {
+          margin-bottom: 0;
+        }
+      }
+      @include break(middle-bear) {
+        width: 100%;
+        float: none;
+        margin-right: 0;
+        margin-bottom: 4%;
+
+        &:nth-child(3) {
+          margin-bottom: 4%;
+        }
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  article.hentry {
+    margin: 0;
+    border: 0;
+    padding: 0;
+
+    > .entry-wrap {
+      margin: 0;
+      border: 0;
+      padding: 0;
+      background-color: transparent;
+      border-radius: 0;
+    }
+  }
+
+  img {
+    position: relative;
+    min-width: 100%;
+    z-index: 1;
+    @include transition(#{opacity 0.6s ease});
+  }
+
+  .x-recent-posts-img {
+    overflow: hidden;
+    position: relative;
+    padding-bottom: 55.8823529%;
+    background-color: $navbarBackground;
+    @include transition(#{background-color 0.3s ease});
+
+    &:before {
+      display: block;
+      position: absolute;
+      margin: -30px 0 0 -30px;
+      top: 50%;
+      left: 50%;
+      width: 60px;
+      height: 60px;
+      @include font-size(3.2);
+      line-height: 59px;
+      text-align: center;
+      vertical-align: middle;
+      color: $white;
+      background-color: rgba(0, 0, 0, 0.35);
+      border-radius: 100em;
+      z-index: 0;
+      @include font-awesome();
+    }
+  }
+
+  .has-post-thumbnail .x-recent-posts-img {
+    padding: 0;
+  }
+
+  .format-standard .x-recent-posts-img:before { content: "\f0f6"; }
+  .format-video .x-recent-posts-img:before    { content: "\f008"; }
+  .format-audio .x-recent-posts-img:before    { content: "\f001"; }
+  .format-image .x-recent-posts-img:before    { content: "\f083"; }
+  .format-gallery .x-recent-posts-img:before  { content: "\f03e"; }
+  .format-link .x-recent-posts-img:before     { content: "\f0c1"; }
+  .format-quote .x-recent-posts-img:before    { content: "\f10d"; }
+  .x-portfolio .x-recent-posts-img:before     {
+    content: "\f067";
+    line-height: 62px;
+  }
+
+  .x-recent-posts-content {
+    border-top: 0;
+    padding: 0.65em 0.75em 0.775em;
+    border-radius: 0 0 3px 3px;
+  }
+
+  .h-recent-posts,
+  .x-recent-posts-date {
+    display: block;
+    line-height: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .h-recent-posts {
+    margin: 0 0 2px;
+    padding-bottom: 4px;
+    @include font-size(1.7);
+    @include transition(#{color 0.3s ease});
+  }
+
+  .x-recent-posts-date {
+    margin: 0;
+    @include font-size(1.0);
+    text-transform: uppercase;
+  }
+
+  &.vertical {
+    a {
+      float: none;
+
+      &.x-recent-post1,
+      &.x-recent-post2,
+      &.x-recent-post3,
+      &.x-recent-post4 {
+        width: 100%;
+        margin-bottom: 4%;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}
+
+.js {
+  .x-recent-posts {
+    &[data-fade="true"] {
+      a {
+        opacity: 0;
+      }
+    }
+  }
+}
+
+
+
+// Audio
+// =============================================================================
+
+.x-audio {  }
+
+
+
+// Responsive Pricing Table
+// =============================================================================
+
+.x-pricing-table {
+  width: 100%;
+  margin: $baseMargin 0;
+
+  &.one-column .x-pricing-column    { width: 100%;      }
+  &.two-columns .x-pricing-column   { width: 50%;       }
+  &.three-columns .x-pricing-column { width: 33.33333%; }
+  &.four-columns .x-pricing-column  { width: 25%;       }
+  &.five-columns .x-pricing-column  { width: 20%;       }
+
+  @include break(cubs) {
+    &[class*="-column"] .x-pricing-column {
+      width: 50%;
+    }
+
+    &.three-columns .x-pricing-column:last-child,
+    &.five-columns .x-pricing-column:last-child {
+      width: 99.9%;
+    }
+  }
+
+  @include
